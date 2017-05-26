@@ -2,6 +2,7 @@ package com.ravi.fuzzyToolBox.Fuzzyfier;
 
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
+import com.ravi.fuzzyToolBox.MemFunctions.SingletonMemFunc;
 
 /**
  * Created by rc16956 on 23/05/2017.
@@ -19,11 +20,8 @@ public class SingletonFuzzyfier implements Fuzzifier {
 
     public FuzzySet fuzzify(double x) {
         FuzzySet set = new FuzzySetImpl(spread);
-        if(x >= start && x <= end){
-            set.setxQuote(x);
-        }else{
-            set.setxQuote(0);
-        }
+        set.setValue(x);
+        set.setMembershipFunction(new SingletonMemFunc());
 
         return set;
     }
