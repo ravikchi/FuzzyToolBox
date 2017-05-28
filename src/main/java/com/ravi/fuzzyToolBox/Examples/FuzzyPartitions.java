@@ -20,13 +20,13 @@ import java.util.Map;
  */
 public class FuzzyPartitions {
     public static void main(String[] args) {
-        FuzzySet inputx = new FuzzySetImpl(1);
-        FuzzySet inputy = new FuzzySetImpl(1);
+        FuzzySet inputx = new FuzzySetImpl(9);
+        FuzzySet inputy = new FuzzySetImpl(9);
 
 
         MemFunc low = new TrapezoidalMemFunc(0, 0, 10, 20);
         MemFunc mid = new TrapezoidalMemFunc(11, 20, 30, 40);
-        MemFunc high = new TrapezoidalMemFunc(31, 40, 50, 60);
+        MemFunc high = new TrapezoidalMemFunc(31, 40, 50, 50);
 
         FZOperation fzOperation = new Tnorm();
 
@@ -83,8 +83,8 @@ public class FuzzyPartitions {
 
 
 
-        for(int i=0; i<=60; i++){
-            for(int x=0; x<=60; x++) {
+        for(int i=0; i<=50; i++){
+            for(int x=0; x<=50; x++) {
                 counts.put(i+"~"+x, 0);
 
                 for (int j = 0; j < rules.size(); j++) {
@@ -100,22 +100,38 @@ public class FuzzyPartitions {
 
                         counts.put(i+"~"+x, noOfRules);
 
-                        /*System.out.println(rule.getName());
+                        System.out.println(rule.getName());
                         System.out.println(" Input levels 1 : "+i+" input level 2 : "+x);
                         System.out.println(firingLevel1);
-                        System.out.println(firingLevel2);*/
+                        System.out.println(firingLevel2);
                     }
                 }
             }
         }
 
-        for(int i=60; i>=0; i--) {
-            System.out.print(i+" | ");
-            for (int x = 0; x <= 60; x++) {
-                //System.out.print(i+","+x+",");
-                System.out.print(counts.get(i+"~"+x)+" ");
+        for(int i=50; i>=0; i--) {
+            String val = "";
+            if(i!=0){
+                val = String.format("%2d",i);
+                System.out.print(val+" | ");
+            }else{
+                System.out.print("----");
+                val = "  ";
+
             }
+            for (int x = 1; x <= 50; x++) {
+                //System.out.print(i+","+x+",");
+                if(i!=0){
+                    System.out.print(counts.get(i + "~" + x) + " ");
+                }else {
+                    System.out.print("--");
+                }
+            }
+
             System.out.println();
+            if(i==0) {
+                System.out.println("   |");
+            }
         }
 
     }
