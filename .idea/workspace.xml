@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5c330e4b-e4ed-4148-bac2-ed5cbc3f0feb" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/classes/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.class" afterPath="$PROJECT_DIR$/target/classes/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.class" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/fuzzyToolBox-0.1.jar" afterPath="$PROJECT_DIR$/target/fuzzyToolBox-0.1.jar" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/Examples/FuzzyPartitions.java" afterPath="$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/Examples/FuzzyPartitions.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java" afterPath="$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/createdFiles.lst" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/TEST-com.ravi.fuzzyToolBox.AppTest.xml" afterPath="$PROJECT_DIR$/target/surefire-reports/TEST-com.ravi.fuzzyToolBox.AppTest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/target/surefire-reports/com.ravi.fuzzyToolBox.AppTest.txt" afterPath="$PROJECT_DIR$/target/surefire-reports/com.ravi.fuzzyToolBox.AppTest.txt" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -67,13 +59,16 @@
       <file leaf-file-name="FXCanvas.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1230">
-              <caret line="96" column="24" lean-forward="true" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
+            <state relative-caret-position="102">
+              <caret line="45" column="26" lean-forward="true" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#3036#3060#0" expanded="true" />
-                <element signature="e#4031#4054#0" expanded="true" />
-                <element signature="e#4299#4322#0" expanded="true" />
+                <element signature="e#2267#2665#0" expanded="true" />
+                <element signature="e#2664#2665#0" expanded="true" />
+                <element signature="method#addRectagles#0;class#FXCanvas#0" expanded="false" />
+                <element signature="e#7590#7614#0" expanded="true" />
+                <element signature="e#8620#8643#0" expanded="true" />
+                <element signature="e#8888#8911#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -104,7 +99,10 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="425">
               <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-              <folding />
+              <folding>
+                <marker date="1496138302480" expanded="true" signature="104:970" ph="..." />
+                <marker date="1496138302480" expanded="true" signature="567:959" ph="..." />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -138,9 +136,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="255">
               <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -765,12 +761,12 @@
       <option name="presentableId" value="Default" />
       <updated>1495536931646</updated>
       <workItem from="1495537281166" duration="1093000" />
-      <workItem from="1496138370348" duration="1212000" />
+      <workItem from="1496138370348" duration="7399000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="2305000" />
+    <option name="totallyTimeSpent" value="8492000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1932" height="1056" extended-state="0" />
@@ -818,18 +814,18 @@
       <breakpoints>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java</url>
-          <line>177</line>
+          <line>303</line>
           <properties />
           <option name="timeStamp" value="10" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="java-line">
           <url>file://$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java</url>
-          <line>149</line>
+          <line>73</line>
           <properties />
-          <option name="timeStamp" value="18" />
+          <option name="timeStamp" value="31" />
         </line-breakpoint>
       </breakpoints>
-      <option name="time" value="19" />
+      <option name="time" value="32" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -863,7 +859,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="493">
           <caret line="29" column="0" lean-forward="false" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1496138302480" expanded="true" signature="104:970" ph="..." />
+            <marker date="1496138302480" expanded="true" signature="567:959" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -919,9 +918,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" column="29" lean-forward="false" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1014,9 +1011,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" column="29" lean-forward="false" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1048,7 +1043,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
           <caret line="12" column="14" lean-forward="false" selection-start-line="12" selection-start-column="14" selection-end-line="12" selection-end-column="14" />
-          <folding />
+          <folding>
+            <marker date="1496138302480" expanded="true" signature="104:970" ph="..." />
+            <marker date="1496138302480" expanded="true" signature="567:959" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1246,7 +1244,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="425">
           <caret line="32" column="0" lean-forward="false" selection-start-line="32" selection-start-column="0" selection-end-line="32" selection-end-column="0" />
-          <folding />
+          <folding>
+            <marker date="1496138302480" expanded="true" signature="104:970" ph="..." />
+            <marker date="1496138302480" expanded="true" signature="567:959" ph="..." />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1254,9 +1255,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="255">
           <caret line="16" column="0" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="16" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1296,13 +1295,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/ravi/fuzzyToolBox/UserInterface/FXCanvas.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="96" column="24" lean-forward="true" selection-start-line="96" selection-start-column="24" selection-end-line="96" selection-end-column="24" />
+        <state relative-caret-position="102">
+          <caret line="45" column="26" lean-forward="true" selection-start-line="45" selection-start-column="26" selection-end-line="45" selection-end-column="26" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#3036#3060#0" expanded="true" />
-            <element signature="e#4031#4054#0" expanded="true" />
-            <element signature="e#4299#4322#0" expanded="true" />
+            <element signature="e#2267#2665#0" expanded="true" />
+            <element signature="e#2664#2665#0" expanded="true" />
+            <element signature="method#addRectagles#0;class#FXCanvas#0" expanded="false" />
+            <element signature="e#7590#7614#0" expanded="true" />
+            <element signature="e#8620#8643#0" expanded="true" />
+            <element signature="e#8888#8911#0" expanded="true" />
           </folding>
         </state>
       </provider>
