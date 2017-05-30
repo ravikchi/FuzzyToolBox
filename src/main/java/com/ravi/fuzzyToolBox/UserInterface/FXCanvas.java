@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -36,7 +37,7 @@ import java.util.*;
 public class FXCanvas extends Application {
     Pane root;
     Scene scene;
-    Stage defStage;
+    Canvas canvas;
 
     public void start(Stage primaryStage) throws Exception {
         final int width = 600;
@@ -63,33 +64,34 @@ public class FXCanvas extends Application {
         spread2.setId("spread2T");
         spread2.setText("0");
 
-        Canvas canvas = getCanvas(width, height, margin, Integer.parseInt(spread1.getText()), Integer.parseInt(spread2.getText()));
+        canvas = new Canvas(width, height);
+        canvas.setId("canv");
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        getCanvas(width, height, margin, Integer.parseInt(spread1.getText()), Integer.parseInt(spread2.getText()), gc);
         root.getChildren().add(canvas);
 
-        Button btn = new Button();
-        btn.setText("Draw");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            public void handle(ActionEvent event) {
-                root.getChildren().remove(root.lookup("#canv"));
-                TextField spread1 = (TextField) root.lookup("#spread1T");
-
-
-                root.getChildren().add(getCanvas(width, height, margin, Integer.parseInt(spread1.getText()), Integer.parseInt(spread1.getText())));
-            }
-        });
 
         root.getChildren().add(spread1L);
         root.getChildren().add(spread1);
         root.getChildren().add(spread2L);
         root.getChildren().add(spread2);
-        root.getChildren().add(btn);
 
         //root.getChildren().add(new Line(0, margin,   width,   margin));
         //root.getChildren().add(new Line(margin, 0,   margin,   height));
         //addRectagles(width, height, margin,Integer.parseInt(spread1.getText()), Integer.parseInt(spread2.getText()), root);
 
         scene = new Scene(root);
-
+        canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            public void handle(MouseEvent mouseEvent) {
+                if(mouseEvent.getSource() instanceof Canvas){
+                    Canvas c = (Canvas) mouseEvent.getSource();
+                    c.getGraphicsContext2D().clearRect(margin, margin, c.getWidth(), c.getHeight());
+                    TextField tf = (TextField) c.getParent().lookup("#spread1T");
+                    TextField tf1 = (TextField) c.getParent().lookup("#spread2T");
+                    getCanvas(width, height, margin, Integer.parseInt(tf.getText()), Integer.parseInt(tf1.getText()), c.getGraphicsContext2D());
+                }
+            }
+        });
 
         primaryStage.setScene(scene);
         primaryStage.setTitle("Test");
@@ -147,10 +149,7 @@ public class FXCanvas extends Application {
         }
     }
 
-    private Canvas getCanvas(int width, int height, int margin, int spread1, int spread2){
-        Canvas canvas = new Canvas(width, height);
-        canvas.setId("canv");
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+    private Canvas getCanvas(int width, int height, int margin, int spread1, int spread2, GraphicsContext gc){
 
         gc.setLineWidth(1.0);
 
