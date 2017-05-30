@@ -16,4 +16,36 @@ public class SingletonMemFunc implements MemFunc {
     public double getRSupport() {
         return 0;
     }
+
+    public double getStart() {
+        return 0;
+    }
+
+    public void setStart(double start) {
+
+    }
+
+    public double getTop1() {
+        return 0;
+    }
+
+    public void setTop1(double top1) {
+
+    }
+
+    public double getTop2() {
+        return 0;
+    }
+
+    public void setTop2(double top2) {
+
+    }
+
+    public double getEnd() {
+        return 0;
+    }
+
+    public void setEnd(double end) {
+
+    }
 }

@@ -20,8 +20,8 @@ import java.util.Map;
  */
 public class FuzzyPartitions {
     public int[][] getCount(Rules rules, FZOperation fzOperation) {
-        int columns = 51;
-        int rows = 51;
+        int columns = 50;
+        int rows = 50;
 
         int[][] counts = new int[rows][columns];
         for(int i=0; i<counts.length; i++){
@@ -39,10 +39,10 @@ public class FuzzyPartitions {
 
                         counts[i][j] = rlCount;
 
-                        System.out.println(rule.getName());
+                        /*System.out.println(rule.getName());
                         System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
                         System.out.println(firingLevel1);
-                        System.out.println(firingLevel2);
+                        System.out.println(firingLevel2);*/
                     }
                 }
             }

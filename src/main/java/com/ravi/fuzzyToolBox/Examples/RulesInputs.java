@@ -14,8 +14,8 @@ public class RulesInputs {
 
 
     private MemFunc low = new TrapezoidalMemFunc(0, 0, 10, 20);
-    private MemFunc mid = new TrapezoidalMemFunc(11, 20, 30, 40);
-    private MemFunc high = new TrapezoidalMemFunc(31, 40, 50, 50);
+    private MemFunc mid = new TrapezoidalMemFunc(11, 21, 30, 40);
+    private MemFunc high = new TrapezoidalMemFunc(31, 41, 50, 50);
 
     public RulesInputs(FuzzySet x, FuzzySet y) {
         this.x = x;

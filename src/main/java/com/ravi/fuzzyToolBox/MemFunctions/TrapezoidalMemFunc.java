@@ -31,6 +31,38 @@ public class TrapezoidalMemFunc implements MemFunc {
         return value;
     }
 
+    public double getStart() {
+        return start;
+    }
+
+    public void setStart(double start) {
+        this.start = start;
+    }
+
+    public double getTop1() {
+        return top1;
+    }
+
+    public void setTop1(double top1) {
+        this.top1 = top1;
+    }
+
+    public double getTop2() {
+        return top2;
+    }
+
+    public void setTop2(double top2) {
+        this.top2 = top2;
+    }
+
+    public double getEnd() {
+        return end;
+    }
+
+    public void setEnd(double end) {
+        this.end = end;
+    }
+
     public double getLSupport() {
         return start;
     }

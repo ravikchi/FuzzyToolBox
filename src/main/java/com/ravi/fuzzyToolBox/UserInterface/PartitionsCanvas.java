@@ -10,8 +10,4 @@ public class PartitionsCanvas extends Canvas {
     public PartitionsCanvas(double width, double height) {
         super(width, height);
     }
-
-    public void test(){
-
-    }
 }

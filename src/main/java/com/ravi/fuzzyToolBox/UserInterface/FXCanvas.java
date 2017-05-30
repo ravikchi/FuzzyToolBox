@@ -4,6 +4,7 @@ import com.ravi.fuzzyToolBox.Examples.FuzzyPartitions;
 import com.ravi.fuzzyToolBox.Examples.RulesInputs;
 import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
+import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.Rules.Rules;
 import com.ravi.fuzzyToolBox.Tnorm;
 import javafx.application.Application;
@@ -41,21 +42,21 @@ public class FXCanvas extends Application {
 
     public void start(Stage primaryStage) throws Exception {
         final int width = 600;
-        final int height = 600;
+        final int height = 700;
         final int margin = 100;
 
         root = new Pane();
 
 
         //root.getChildren().add(getCanvas(width, height, margin, 0, 0));
-        Label spread1L = new Label("Spread for Input1");
+        Label spread1L = new Label("Spread of Input FS 1");
         spread1L.setTranslateX(110);
         TextField spread1 = new TextField();
         spread1.setTranslateX(260);
         spread1.setText("0");
         spread1.setId("spread1T");
 
-        Label spread2L = new Label("Spread for Input2");
+        Label spread2L = new Label("Spread of Input FS 2");
         spread2L.setTranslateX(110);
         spread2L.setTranslateY(30);
         TextField spread2 = new TextField();
@@ -85,7 +86,7 @@ public class FXCanvas extends Application {
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getSource() instanceof Canvas){
                     Canvas c = (Canvas) mouseEvent.getSource();
-                    c.getGraphicsContext2D().clearRect(margin, margin, c.getWidth(), c.getHeight());
+                    c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
                     TextField tf = (TextField) c.getParent().lookup("#spread1T");
                     TextField tf1 = (TextField) c.getParent().lookup("#spread2T");
                     getCanvas(width, height, margin, Integer.parseInt(tf.getText()), Integer.parseInt(tf1.getText()), c.getGraphicsContext2D());
@@ -149,17 +150,19 @@ public class FXCanvas extends Application {
         }
     }
 
-    private Canvas getCanvas(int width, int height, int margin, int spread1, int spread2, GraphicsContext gc){
+    private RulesInputs getCanvas(int width, int height, int margin, int spread1, int spread2, GraphicsContext gc){
 
         gc.setLineWidth(1.0);
 
         gc.strokeLine(margin, 0, margin, height);
-        gc.strokeLine(0, margin, width, margin);
+        gc.strokeLine(0, height-margin, width, height-margin);
 
         FuzzyPartitions partitions = new FuzzyPartitions();
-        Rules rules = partitions.getRules(new RulesInputs(new FuzzySetImpl(spread1), new FuzzySetImpl(spread2)));
+        RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(spread1), new FuzzySetImpl(spread2));
+        Rules rules = partitions.getRules(rulesInputs);
         FZOperation fzOperation = new Tnorm();
         int[][] counts = partitions.getCount(rules, fzOperation);
+
 
         this.printResults(counts);
         Map<Integer, List<String>> rectangles = this.findRectangles(counts);
@@ -188,7 +191,58 @@ public class FXCanvas extends Application {
                 gc.fillText(value+"", x1+w/2, y1+h/2);
             }
         }
-        return canvas;
+
+        gc.setFill(Color.BLUE);
+        drawMemFuncX(gc, rulesInputs.getLow(), margin, height);
+        gc.setFill(Color.GREEN);
+        drawMemFuncX(gc, rulesInputs.getMid(), margin, height);
+        gc.setFill(Color.YELLOW);
+        drawMemFuncX(gc, rulesInputs.getHigh(), margin, height);
+
+        gc.setFill(Color.BLUE);
+        drawMemFuncY(gc, rulesInputs.getLow(), margin, width);
+        gc.setFill(Color.GREEN);
+        drawMemFuncY(gc, rulesInputs.getMid(), margin, width);
+        gc.setFill(Color.YELLOW);
+        drawMemFuncY(gc, rulesInputs.getHigh(), margin, width);
+
+        if(rulesInputs.getLow().getTop2() != rulesInputs.getMid().getStart()) {
+            gc.strokeLine(rulesInputs.getLow().getTop2() * 10 + margin, margin, rulesInputs.getLow().getTop2() * 10 + margin, height - margin);
+            gc.strokeLine(margin, rulesInputs.getLow().getTop2()*10+margin, width, rulesInputs.getLow().getTop2()*10+margin);
+        }
+
+        if(rulesInputs.getMid().getTop1() != rulesInputs.getLow().getEnd()){
+            gc.strokeLine(rulesInputs.getMid().getTop1() * 10 + margin, margin, rulesInputs.getMid().getTop1() * 10 + margin, height - margin);
+            gc.strokeLine(margin, rulesInputs.getMid().getTop1()*10+margin, width, rulesInputs.getMid().getTop1()*10+margin);
+        }
+
+        if(rulesInputs.getMid().getTop2() != rulesInputs.getHigh().getStart()){
+            gc.strokeLine(rulesInputs.getMid().getTop2() * 10 + margin, margin, rulesInputs.getMid().getTop2() * 10 + margin, height - margin);
+            gc.strokeLine(margin, rulesInputs.getMid().getTop2()*10+margin, width, rulesInputs.getMid().getTop2()*10+margin);
+        }
+
+        if(rulesInputs.getHigh().getTop1() != rulesInputs.getMid().getEnd()){
+            gc.strokeLine(rulesInputs.getHigh().getTop1() * 10 + margin, margin, rulesInputs.getHigh().getTop1() * 10 + margin, height - margin);
+            gc.strokeLine(margin, rulesInputs.getHigh().getTop1()*10+margin, width, rulesInputs.getHigh().getTop1()*10+margin);
+        }
+
+        return rulesInputs;
+    }
+
+    private void drawMemFuncX(GraphicsContext gc, MemFunc memFunc, int margin, int height){
+        gc.strokeLine(memFunc.getStart()*10+margin, height-margin, memFunc.getTop1()*10+margin, height-margin/2);
+        //gc.strokeLine(memFunc.getTop1()*10+margin, margin, memFunc.getTop1()*10+margin, height-margin);
+        gc.strokeLine(memFunc.getTop1()*10+margin, height-margin/2, memFunc.getTop2()*10+margin,height-margin/2);
+        //gc.strokeLine(memFunc.getTop2()*10+margin, margin, memFunc.getTop2()*10+margin, height-margin);
+        gc.strokeLine(memFunc.getTop2()*10+margin, height-margin/2, memFunc.getEnd()*10+margin,height-margin);
+    }
+
+    private void drawMemFuncY(GraphicsContext gc, MemFunc memFunc, int margin, int width){
+        gc.strokeLine(margin, memFunc.getStart()*10+margin, margin/2, memFunc.getTop1()*10+margin);
+        //gc.strokeLine(margin, memFunc.getTop1()*10+margin, width, memFunc.getTop1()*10+margin);
+        gc.strokeLine(margin/2, memFunc.getTop1()*10+margin, margin/2, memFunc.getTop2()*10+margin);
+        //gc.strokeLine(margin, memFunc.getTop2()*10+margin, width, memFunc.getTop2()*10+margin);
+        gc.strokeLine(margin/2, memFunc.getTop2()*10+margin, margin, memFunc.getEnd()*10+margin);
     }
 
     private void setGcFill(int value, GraphicsContext gc){
@@ -225,7 +279,10 @@ public class FXCanvas extends Application {
                     endPoints.add(new Triplet(i,oldEnd,j));
 
                     curNum = counts[i][j];
-                    oldEnd = j;
+                    oldEnd = j-1;
+                    if(oldEnd == -1){
+                        oldEnd = 0;
+                    }
                 }
             }
             List<Triplet> endPoints = rowSE.get(curNum);
@@ -233,7 +290,7 @@ public class FXCanvas extends Application {
                 endPoints = new ArrayList<Triplet>();
                 rowSE.put(curNum, endPoints);
             }
-            endPoints.add(new Triplet(i,oldEnd,counts[i].length-1));
+            endPoints.add(new Triplet(i,oldEnd,counts[i].length));
 
         }
 
@@ -258,6 +315,7 @@ public class FXCanvas extends Application {
                 ll.add(t.getRow());
             }
 
+
             Iterator<String> itr  = listMap.keySet().iterator();
             while (itr.hasNext()){
                 String coordinates = itr.next();
@@ -268,14 +326,15 @@ public class FXCanvas extends Application {
                     continue;
                 }
 
-                int startI = ll.get(0);
-                if(ll.get(0) != 0){
-                    startI = startI-1;
+                int startI = ll.get(0)-1;
+                if(ll.get(0) == 1){
+                    startI = ll.get(0);
                 }
 
                 int prevI = ll.get(0);
                 for (int i = 1; i < ll.size(); i++) {
-                    if(prevI+1!=ll.get(i)){
+                    int rowNum = ll.get(i);
+                    if(prevI+1!= rowNum){
                         System.out.println("coordinates for "+k+" : ("+arr[0]+", "+startI+") and ("+arr[1]+", "+prevI+")");
                         List<String> coords = output.get(k);
                         if(coords == null){
@@ -283,12 +342,13 @@ public class FXCanvas extends Application {
                             output.put(k, coords);
                         }
 
-                        coords.add(arr[0]+","+startI+","+arr[1]+","+prevI);
-                        startI = ll.get(i)-1;
-
-
+                        coords.add(arr[0]+","+startI+","+arr[1]+","+(prevI+1));
+                        startI = rowNum-1;
+                        if(rowNum==0){
+                            startI = rowNum;
+                        }
                     }
-                    prevI = ll.get(i);
+                    prevI = rowNum;
                 }
                 System.out.println("coordinates for "+k+" : ("+arr[0]+", "+startI+") and ("+arr[1]+", "+prevI+")");
                 List<String> coords = output.get(k);
@@ -297,7 +357,7 @@ public class FXCanvas extends Application {
                     output.put(k, coords);
                 }
 
-                coords.add(arr[0]+","+startI+","+arr[1]+","+prevI);
+                coords.add(arr[0]+","+startI+","+arr[1]+","+(prevI+1));
             }
         }
         return output;
@@ -306,7 +366,7 @@ public class FXCanvas extends Application {
     public void printResults(int[][] counts){
 
 
-        for(int i=50; i>=0; i--) {
+        for(int i=49; i>=0; i--) {
             String val = "";
             if(i!=0){
                 val = String.format("%2d",i);
@@ -316,7 +376,7 @@ public class FXCanvas extends Application {
                 val = "  ";
 
             }
-            for (int x = 1; x <= 50; x++) {
+            for (int x = 1; x < 50; x++) {
                 //System.out.print(i+","+x+",");
                 if(i!=0){
                     String v = String.format("%2d",counts[i][x]);
@@ -338,11 +398,11 @@ public class FXCanvas extends Application {
         }
 
 
-        for(int i=50; i>=0; i--) {
-            for (int x = 1; x <= 50; x++) {
+        /*for(int i=49; i>=0; i--) {
+            for (int x = 1; x < 50; x++) {
                 System.out.println(i+","+x+","+counts[i][x]);
             }
-        }
+        }*/
     }
 
     public static void main(String[] args) {
