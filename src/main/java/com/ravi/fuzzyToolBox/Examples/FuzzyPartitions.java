@@ -39,10 +39,10 @@ public class FuzzyPartitions {
 
                         counts[i][j] = rlCount;
 
-                        /*System.out.println(rule.getName());
+                        System.out.println(rule.getName());
                         System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
                         System.out.println(firingLevel1);
-                        System.out.println(firingLevel2);*/
+                        System.out.println(firingLevel2);
                     }
                 }
             }

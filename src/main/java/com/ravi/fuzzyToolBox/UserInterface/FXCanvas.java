@@ -13,7 +13,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
-import org.jfree.chart.axis.ColorBar;
 
 import javax.swing.text.html.HTMLDocument;
 import java.util.*;
@@ -93,7 +92,7 @@ public class FXCanvas extends Application {
         Map<Integer, List<Triplet>> rowSE = new HashMap<Integer, List<Triplet>>();
 
         for (int i = 0; i <counts.length ; i++) {
-            curNum = 1;
+            curNum = 0;
             int oldEnd = 0;
             for (int j = 0; j <counts[i].length ; j++) {
                 if(counts[i][j] != curNum){
@@ -105,7 +104,7 @@ public class FXCanvas extends Application {
                     endPoints.add(new Triplet(i,oldEnd,(j-1) ));
 
                     curNum = counts[i][j];
-                    oldEnd = j;
+                    oldEnd = j-1;
                 }
             }
             List<Triplet> endPoints = rowSE.get(curNum);
@@ -122,6 +121,9 @@ public class FXCanvas extends Application {
         Iterator<Integer> it = rowSE.keySet().iterator();
         while(it.hasNext()){
             int k = it.next();
+            if(k==0){
+                continue;
+            }
             Map<String, List<Integer>> listMap = new HashMap<String, List<Integer>>();
 
             List<Triplet> points = rowSE.get(k);
@@ -145,7 +147,7 @@ public class FXCanvas extends Application {
                     continue;
                 }
 
-                int startI = ll.get(0);
+                int startI = ll.get(0)-1;
                 int prevI = ll.get(0);
                 for (int i = 1; i < ll.size(); i++) {
                     if(prevI+1!=ll.get(i)){
@@ -157,11 +159,11 @@ public class FXCanvas extends Application {
                         }
 
                         coords.add(arr[0]+","+startI+","+arr[1]+","+prevI);
-                        startI = ll.get(i);
+                        startI = ll.get(i)-1;
 
 
                     }
-                    prevI = ll.get(i);
+                    prevI = ll.get(i)+1;
                 }
                 System.out.println("coordinates for "+k+" : ("+arr[0]+", "+startI+") and ("+arr[1]+", "+prevI+")");
                 List<String> coords = output.get(k);
@@ -211,11 +213,11 @@ public class FXCanvas extends Application {
         }
 
 
-        /*for(int i=50; i>=0; i--) {
+        for(int i=50; i>=0; i--) {
             for (int x = 1; x <= 50; x++) {
                 System.out.println(i+","+x+","+counts[i][x]);
             }
-        }*/
+        }
     }
 
     public static void main(String[] args) {
