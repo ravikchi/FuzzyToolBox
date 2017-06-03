@@ -9,5 +9,5 @@ import java.util.List;
  * Created by 611445924 on 26/05/2017.
  */
 public interface FZOperation {
-    public List<Double> run(FuzzySet input, MemFunc memFunc, double x);
+    public double run(FuzzySet input, MemFunc memFunc, double x);
 }

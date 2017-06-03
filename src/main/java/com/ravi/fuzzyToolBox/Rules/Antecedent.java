@@ -5,6 +5,7 @@ import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.Tnorm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -12,14 +13,24 @@ import java.util.List;
  */
 public class Antecedent {
     private FuzzySet input;
-    private MemFunc memFunc;
+    private List<MemFunc> memFuncs;
+
+    public Antecedent(FuzzySet input, List<MemFunc> memFuncs) {
+        this.input = input;
+        this.memFuncs = memFuncs;
+    }
 
     public Antecedent(FuzzySet input, MemFunc memFunc) {
         this.input = input;
-        this.memFunc = memFunc;
+        this.memFuncs = new ArrayList<MemFunc>();
+        this.memFuncs.add(memFunc);
     }
 
     public List<Double> getFiringLevel(double x, FZOperation fuzzyOperation){
-        return fuzzyOperation.run(input, memFunc, x);
+        List<Double> firingLevels = new ArrayList<Double>();
+        for(MemFunc memFunc : memFuncs){
+            firingLevels.add(fuzzyOperation.run(input, memFunc, x));
+        }
+        return firingLevels;
     }
 }

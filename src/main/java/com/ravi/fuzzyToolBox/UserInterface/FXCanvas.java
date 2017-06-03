@@ -8,27 +8,17 @@ import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.Rules.Rules;
 import com.ravi.fuzzyToolBox.Tnorm;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Line;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontSmoothingType;
-import javafx.scene.text.Text;
-import javafx.scene.text.TextBoundsType;
 import javafx.stage.Stage;
 
-import javax.swing.text.html.HTMLDocument;
 import java.util.*;
 
 
@@ -76,10 +66,6 @@ public class FXCanvas extends Application {
         root.getChildren().add(spread1);
         root.getChildren().add(spread2L);
         root.getChildren().add(spread2);
-
-        //root.getChildren().add(new Line(0, margin,   width,   margin));
-        //root.getChildren().add(new Line(margin, 0,   margin,   height));
-        //addRectagles(width, height, margin,Integer.parseInt(spread1.getText()), Integer.parseInt(spread2.getText()), root);
 
         scene = new Scene(root);
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
@@ -192,17 +178,13 @@ public class FXCanvas extends Application {
 
     private void drawMemFuncX(GraphicsContext gc, MemFunc memFunc, int margin, int height){
         gc.strokeLine(memFunc.getStart()*10+margin, height-margin, memFunc.getTop1()*10+margin, height-margin/2);
-        //gc.strokeLine(memFunc.getTop1()*10+margin, margin, memFunc.getTop1()*10+margin, height-margin);
         gc.strokeLine(memFunc.getTop1()*10+margin, height-margin/2, memFunc.getTop2()*10+margin,height-margin/2);
-        //gc.strokeLine(memFunc.getTop2()*10+margin, margin, memFunc.getTop2()*10+margin, height-margin);
         gc.strokeLine(memFunc.getTop2()*10+margin, height-margin/2, memFunc.getEnd()*10+margin,height-margin);
     }
 
     private void drawMemFuncY(GraphicsContext gc, MemFunc memFunc, int margin, int width){
         gc.strokeLine(margin, memFunc.getStart()*10+margin, margin/2, memFunc.getTop1()*10+margin);
-        //gc.strokeLine(margin, memFunc.getTop1()*10+margin, width, memFunc.getTop1()*10+margin);
         gc.strokeLine(margin/2, memFunc.getTop1()*10+margin, margin/2, memFunc.getTop2()*10+margin);
-        //gc.strokeLine(margin, memFunc.getTop2()*10+margin, width, memFunc.getTop2()*10+margin);
         gc.strokeLine(margin/2, memFunc.getTop2()*10+margin, margin, memFunc.getEnd()*10+margin);
     }
 
