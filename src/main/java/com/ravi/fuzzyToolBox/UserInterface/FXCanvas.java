@@ -111,56 +111,6 @@ public class FXCanvas extends Application {
 
     }
 
-    private void addRectagles(int width, int height, int margin, int spread1, int spread2, Pane root){
-        FuzzyPartitions partitions = new FuzzyPartitions();
-        Rules rules = partitions.getRules(new RulesInputs(new FuzzySetImpl(spread1), new FuzzySetImpl(spread2)));
-        FZOperation fzOperation = new Tnorm();
-        int[][] counts = partitions.getCount(rules, fzOperation);
-
-        this.printResults(counts);
-        Map<Integer, List<String>> rectangles = this.findRectangles(counts);
-
-
-
-        Iterator<Integer> it = rectangles.keySet().iterator();
-        while(it.hasNext()){
-            int value = it.next();
-            List<String> coordinatesli = rectangles.get(value);
-            for(String coordinates:coordinatesli) {
-                String[] arr = coordinates.split(",");
-                double x1 =Integer.parseInt(arr[0])*10+margin;
-                double y1 = Integer.parseInt(arr[1])*10+margin;
-                double x2 = Integer.parseInt(arr[2])*10+margin;
-                double y2 = Integer.parseInt(arr[3])*10+margin;
-
-                double w = Math.abs(x2 - x1);
-                double h = Math.abs(y2 - y1);
-
-                Rectangle rec = new Rectangle(x1, y1, w, h);
-                Text text = new Text(value+"");
-                text.setFontSmoothingType(FontSmoothingType.LCD);
-                text.setX(x1+w/2);
-                text.setY(y1+h/2);
-                if(value == 1) {
-                    rec.setFill(Color.WHITE);
-                }else if(value == 2){
-                    rec.setFill(Color.BLUE);
-                }else if(value == 3){
-                    rec.setFill(Color.AQUA);
-                }else if(value == 4){
-                    rec.setFill(Color.RED);
-                }else if(value == 6){
-                    rec.setFill(Color.BEIGE);
-                }else if(value == 9){
-                    rec.setFill(Color.MAGENTA);
-                }
-
-                root.getChildren().add(rec);
-                root.getChildren().add(text);
-            }
-        }
-    }
-
     private RulesInputs getCanvas(int width, int height, int margin, int spread1, int spread2, GraphicsContext gc){
 
         gc.setLineWidth(1.0);
