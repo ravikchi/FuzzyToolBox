@@ -86,10 +86,21 @@ public class FXCanvas extends Application {
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getSource() instanceof Canvas){
                     Canvas c = (Canvas) mouseEvent.getSource();
-                    c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
                     TextField tf = (TextField) c.getParent().lookup("#spread1T");
                     TextField tf1 = (TextField) c.getParent().lookup("#spread2T");
-                    getCanvas(width, height, margin, Integer.parseInt(tf.getText()), Integer.parseInt(tf1.getText()), c.getGraphicsContext2D());
+                    int tfint = 0;
+                    int tf1int = 0;
+                    try{
+
+                        tfint = Integer.parseInt(tf.getText());
+                        tf1int = Integer.parseInt(tf1.getText());
+                        c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
+                        getCanvas(width, height, margin, tfint, tf1int, c.getGraphicsContext2D());
+
+                    }catch(NumberFormatException nfe){
+                        c.getGraphicsContext2D().setFill(Color.RED);
+                        c.getGraphicsContext2D().fillText("Input should be a number", margin, margin-10);
+                    }
                 }
             }
         });
@@ -327,8 +338,8 @@ public class FXCanvas extends Application {
                 }
 
                 int startI = ll.get(0)-1;
-                if(ll.get(0) == 1){
-                    startI = ll.get(0);
+                if(startI < 0){
+                    startI = 0;
                 }
 
                 int prevI = ll.get(0);
@@ -344,13 +355,13 @@ public class FXCanvas extends Application {
 
                         coords.add(arr[0]+","+startI+","+arr[1]+","+(prevI+1));
                         startI = rowNum-1;
-                        if(rowNum==0){
-                            startI = rowNum;
+                        if(startI < 0){
+                            startI = 0;
                         }
                     }
                     prevI = rowNum;
                 }
-                System.out.println("coordinates for "+k+" : ("+arr[0]+", "+startI+") and ("+arr[1]+", "+prevI+")");
+                System.out.println("coordinates for "+k+" : ("+arr[0]+", "+startI+") and ("+arr[1]+", "+(prevI+1)+")");
                 List<String> coords = output.get(k);
                 if(coords == null){
                     coords = new ArrayList<String>();

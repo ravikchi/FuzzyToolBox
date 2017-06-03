@@ -29,15 +29,31 @@ public class FuzzyPartitions {
                 for (int k = 0; k < rules.size(); k++) {
                     Rule rule = rules.getRule(k);
                     Antecedent antecedent = rule.getAntecedents().get(0);
-                    double firingLevel1 = antecedent.getFiringLevel(i, fzOperation);
+                    List<Double> firingLevel1 = antecedent.getFiringLevel(i, fzOperation);
                     antecedent = rule.getAntecedents().get(1);
-                    double firingLevel2 = antecedent.getFiringLevel(j, fzOperation);
+                    List<Double> firingLevel2 = antecedent.getFiringLevel(j, fzOperation);
 
-                    if(firingLevel1 > 0 && firingLevel2 > 0) {
-                        int rlCount = counts[i][j];
-                        rlCount++;
+                    if(firingLevel1.size() > 0 && firingLevel2.size() > 0) {
+                        boolean fired1 = false;
+                        for(double fl : firingLevel1){
+                            if(fl > 0){
+                                fired1 = true;
+                            }
+                        }
 
-                        counts[i][j] = rlCount;
+                        boolean fired2 = false;
+                        for(double fl : firingLevel2){
+                            if(fl > 0){
+                                fired2 = true;
+                            }
+                        }
+
+                        if(fired1 && fired2) {
+                            int rlCount = counts[i][j];
+                            rlCount++;
+
+                            counts[i][j] = rlCount;
+                        }
 
                         /*System.out.println(rule.getName());
                         System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
