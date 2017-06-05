@@ -13,6 +13,15 @@ public class SingletonMemFunc implements MemFunc {
         return 0;
     }
 
+    public String getName() {
+        return "";
+    }
+
+    public void setName(String name) {
+
+    }
+
+
     public double getRSupport() {
         return 0;
     }

@@ -5,20 +5,29 @@ import com.ravi.fuzzyToolBox.Examples.RulesInputs;
 import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
+import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 import com.ravi.fuzzyToolBox.Rules.Rules;
 import com.ravi.fuzzyToolBox.Tnorm;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
+import javax.xml.soap.Text;
 import java.util.*;
 
 
@@ -29,45 +38,129 @@ public class FXCanvas extends Application {
     Pane root;
     Scene scene;
     Canvas canvas;
+    int width = 600;
+    int height = 700;
+    int margin = 100;
+    private TableView table = new TableView();
+
+    public FXCanvas() {
+        table.setId("Table");
+    }
 
     public void start(Stage primaryStage) throws Exception {
-        final int width = 600;
-        final int height = 700;
-        final int margin = 100;
 
         root = new Pane();
 
 
-        //root.getChildren().add(getCanvas(width, height, margin, 0, 0));
+        Group grp = new Group();
+        grp.setTranslateX(width+30);
+
+
+        int moveDown = 0;
+        int moveRight = 140;
+
+        Group row1 = new Group();
+        Label title = new Label("Parameters");
+        row1.getChildren().add(title);
+        row1.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
+
+        Group row2 = new Group();
         Label spread1L = new Label("Spread of Input FS 1");
-        spread1L.setTranslateX(110);
         TextField spread1 = new TextField();
-        spread1.setTranslateX(260);
+        spread1.setTranslateX(moveRight);
         spread1.setText("0");
         spread1.setId("spread1T");
+        row2.getChildren().addAll(spread1, spread1L);
+        row2.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
 
+        Group row3 = new Group();
         Label spread2L = new Label("Spread of Input FS 2");
-        spread2L.setTranslateX(110);
-        spread2L.setTranslateY(30);
         TextField spread2 = new TextField();
-        spread2.setTranslateY(30);
-        spread2.setTranslateX(260);
+        spread2.setTranslateX(moveRight);
         spread2.setId("spread2T");
         spread2.setText("0");
+        row3.getChildren().addAll(spread2, spread2L);
+        row3.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
+
+        int colWidth = 30;
+
+        Group row4 = new Group();
+        row4.getChildren().add(table);
+        row4.setTranslateY(moveDown);
+
+        TableColumn name = new TableColumn("Name");
+        name.setCellValueFactory(new PropertyValueFactory<MemFunc, String>("name"));
+        TableColumn start = new TableColumn("Start");
+        start.setCellValueFactory(new PropertyValueFactory<MemFunc, String>("start"));
+        TableColumn top1 = new TableColumn("Top1");
+        top1.setCellValueFactory(new PropertyValueFactory<MemFunc, String>("top1"));
+        TableColumn top2 = new TableColumn("Top2");
+        top2.setCellValueFactory(new PropertyValueFactory<MemFunc, String>("top2"));
+        TableColumn end = new TableColumn("End");
+        end.setCellValueFactory(new PropertyValueFactory<MemFunc, String>("end"));
+
+        table.getColumns().addAll(name, start, top1, top2, end);
+
+        RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(0), new FuzzySetImpl(0), 11);
+        List<MemFunc> low = new ArrayList<MemFunc>();
+        MemFunc lowMem = new TrapezoidalMemFunc("low",0, 0, 10, 20);
+        MemFunc lowLower = new TrapezoidalMemFunc("low",0, 0, 10, 18);
+        low.add(lowMem);
+        low.add(lowLower);
+
+        List<MemFunc> mid = new ArrayList<MemFunc>();
+        MemFunc midMem = new TrapezoidalMemFunc("mid",11, 21, 30, 40);
+        MemFunc midLower = new TrapezoidalMemFunc("mid",13, 21, 30, 38);
+        mid.add(midMem);
+        mid.add(midLower);
+
+        List<MemFunc> high = new ArrayList<MemFunc>();
+        MemFunc highMem = new TrapezoidalMemFunc("high",31, 41, 50, 50);
+        MemFunc highLower = new TrapezoidalMemFunc("high",33, 41, 50, 50);
+        high.add(highMem);
+        high.add(highLower);
+
+        rulesInputs.setLow(low);
+        rulesInputs.setMid(mid);
+        rulesInputs.setHigh(high);
+
+        ObservableList<MemFunc> memFuncs = FXCollections.observableArrayList();
+        memFuncs.addAll(low);
+        memFuncs.addAll(mid);
+        memFuncs.addAll(high);
+
+        table.setItems(memFuncs);
+
+        grp.getChildren().add(row1);
+        grp.getChildren().add(row2);
+        grp.getChildren().add(row3);
+        grp.getChildren().add(row4);
 
         canvas = new Canvas(width, height);
+        prepareCanvas(rulesInputs);
+
+        Line line = new Line(width,0, width, height);
+
+        root.getChildren().add(canvas);
+        root.getChildren().add(grp);
+        root.getChildren().add(line);
+
+        scene = new Scene(root, width+500, height);
+
+
+        primaryStage.setScene(scene);
+        primaryStage.setTitle("Test");
+        primaryStage.show();
+
+    }
+
+    private void prepareCanvas(RulesInputs rulesInputs){
         canvas.setId("canv");
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        getCanvas(width, height, margin, Integer.parseInt(spread1.getText()), Integer.parseInt(spread2.getText()), gc);
-        root.getChildren().add(canvas);
-
-
-        root.getChildren().add(spread1L);
-        root.getChildren().add(spread1);
-        root.getChildren().add(spread2L);
-        root.getChildren().add(spread2);
-
-        scene = new Scene(root);
+        getCanvas(width, height, margin, rulesInputs, gc);
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getSource() instanceof Canvas){
@@ -77,11 +170,33 @@ public class FXCanvas extends Application {
                     int tfint = 0;
                     int tf1int = 0;
                     try{
-
                         tfint = Integer.parseInt(tf.getText());
                         tf1int = Integer.parseInt(tf1.getText());
+
+                        RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(tfint), new FuzzySetImpl(tf1int), 11);
+                        List<MemFunc> low = new ArrayList<MemFunc>();
+                        List<MemFunc> mid = new ArrayList<MemFunc>();
+                        List<MemFunc> high = new ArrayList<MemFunc>();
+
+                        for(Object obj : table.getItems()){
+                            if(obj instanceof MemFunc) {
+                                MemFunc memFunc = (MemFunc) obj;
+                                if(memFunc.getName().equalsIgnoreCase("low")){
+                                    low.add(memFunc);
+                                }else if(memFunc.getName().equalsIgnoreCase("mid")){
+                                    mid.add(memFunc);
+                                }else if(memFunc.getName().equalsIgnoreCase("high")){
+                                    high.add(memFunc);
+                                }
+                            }
+                        }
+
+                        rulesInputs.setLow(low);
+                        rulesInputs.setMid(mid);
+                        rulesInputs.setHigh(high);
+
                         c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
-                        getCanvas(width, height, margin, tfint, tf1int, c.getGraphicsContext2D());
+                        getCanvas(width, height, margin, rulesInputs , c.getGraphicsContext2D());
 
                     }catch(NumberFormatException nfe){
                         c.getGraphicsContext2D().setFill(Color.RED);
@@ -90,14 +205,9 @@ public class FXCanvas extends Application {
                 }
             }
         });
-
-        primaryStage.setScene(scene);
-        primaryStage.setTitle("Test");
-        primaryStage.show();
-
     }
 
-    private RulesInputs getCanvas(int width, int height, int margin, int spread1, int spread2, GraphicsContext gc){
+    private RulesInputs getCanvas(int width, int height, int margin, RulesInputs rulesInputs, GraphicsContext gc){
 
         gc.setLineWidth(1.0);
 
@@ -105,7 +215,6 @@ public class FXCanvas extends Application {
         gc.strokeLine(0, height-margin, width, height-margin);
 
         FuzzyPartitions partitions = new FuzzyPartitions();
-        RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(spread1), new FuzzySetImpl(spread2));
         Rules rules = partitions.getRules(rulesInputs);
         FZOperation fzOperation = new Tnorm();
         int[][] counts = partitions.getCount(rules, fzOperation);
@@ -139,31 +248,67 @@ public class FXCanvas extends Application {
             }
         }
 
-        gc.setFill(Color.BLUE);
-        drawMemFuncX(gc, rulesInputs.getLow(), margin, height);
-        gc.setFill(Color.GREEN);
-        drawMemFuncX(gc, rulesInputs.getMid(), margin, height);
-        gc.setFill(Color.YELLOW);
-        drawMemFuncX(gc, rulesInputs.getHigh(), margin, height);
+        drawLines(gc, rulesInputs, 0);
+        drawLines(gc, rulesInputs, 1);
 
-        gc.setFill(Color.BLUE);
-        drawMemFuncY(gc, rulesInputs.getLow(), margin, width);
-        gc.setFill(Color.GREEN);
-        drawMemFuncY(gc, rulesInputs.getMid(), margin, width);
-        gc.setFill(Color.YELLOW);
-        drawMemFuncY(gc, rulesInputs.getHigh(), margin, width);
+        drawMeasurementLines(width, height, margin, gc, counts.length, counts[0].length);
 
-        if(rulesInputs.getLow().getTop2() != rulesInputs.getMid().getStart()) {
-            gc.strokeLine(rulesInputs.getLow().getTop2() * 10 + margin, margin, rulesInputs.getLow().getTop2() * 10 + margin, height - margin);
-            gc.strokeLine(margin, rulesInputs.getLow().getTop2()*10+margin, width, rulesInputs.getLow().getTop2()*10+margin);
+        return rulesInputs;
+    }
+
+    private void drawMeasurementLines(int width, int height, int margin, GraphicsContext gc, int xCoords, int yCoords){
+        for (int i = 0; i <= xCoords; i=i+5) {
+            gc.strokeLine((i*10)+margin, height-margin, (i*10)+margin, height-margin+10);
+            gc.fillText(i+"",(i*10)+margin-5,height-margin+25);
         }
 
-        if(rulesInputs.getMid().getTop1() != rulesInputs.getLow().getEnd()){
-            gc.strokeLine(rulesInputs.getMid().getTop1() * 10 + margin, margin, rulesInputs.getMid().getTop1() * 10 + margin, height - margin);
-            gc.strokeLine(margin, rulesInputs.getMid().getTop1()*10+margin, width, rulesInputs.getMid().getTop1()*10+margin);
+        for (int i = 0; i <= xCoords; i=i+5) {
+            gc.strokeLine(margin-10, margin+i*10, margin, margin+i*10);
+            gc.fillText(i+"",margin-25,height-margin-i*10+5);
         }
 
-        if(rulesInputs.getMid().getTop2() != rulesInputs.getHigh().getStart()){
+    }
+
+    private void drawLines(GraphicsContext gc, RulesInputs rulesInputs, int i){
+        if(rulesInputs.getLow().size() <= i){
+            return;
+        }
+        gc.setStroke(Color.BLUE);
+        drawMemFuncX(gc, rulesInputs.getLow().get(i), margin, height);
+        gc.setStroke(Color.GREEN);
+        drawMemFuncX(gc, rulesInputs.getMid().get(i), margin, height);
+        gc.setStroke(Color.RED);
+        drawMemFuncX(gc, rulesInputs.getHigh().get(i), margin, height);
+        gc.setStroke(Color.BROWN);
+        drawMemFuncX(gc, rulesInputs.getInput(), margin, height);
+
+        gc.setStroke(Color.BLUE);
+        drawMemFuncY(gc, rulesInputs.getLow().get(i), margin, width);
+        gc.setStroke(Color.GREEN);
+        drawMemFuncY(gc, rulesInputs.getMid().get(i), margin, width);
+        gc.setStroke(Color.RED);
+        drawMemFuncY(gc, rulesInputs.getHigh().get(i), margin, width);
+
+        gc.setStroke(Color.BROWN);
+        drawMemFuncY(gc, rulesInputs.getInput(), margin, width);
+
+        drawSecondaryPartitions(rulesInputs.getLow().get(i), rulesInputs.getMid().get(0), gc);
+        drawSecondaryPartitions(rulesInputs.getMid().get(i), rulesInputs.getHigh().get(0), gc);
+    }
+
+    private void drawSecondaryPartitions(MemFunc low, MemFunc mid, GraphicsContext gc){
+        gc.setStroke(Color.BLACK);
+        if(low.getTop2() != mid.getStart()) {
+            gc.strokeLine(low.getTop2() * 10 + margin, margin, low.getTop2() * 10 + margin, height - margin);
+            gc.strokeLine(margin,low.getTop2()*10+margin, width, low.getTop2()*10+margin);
+        }
+
+        if(mid.getTop1() != low.getEnd()){
+            gc.strokeLine(mid.getTop1() * 10 + margin, margin, mid.getTop1() * 10 + margin, height - margin);
+            gc.strokeLine(margin, mid.getTop1()*10+margin, width, mid.getTop1()*10+margin);
+        }
+
+        /*if(rulesInputs.getMid().getTop2() != rulesInputs.getHigh().getStart()){
             gc.strokeLine(rulesInputs.getMid().getTop2() * 10 + margin, margin, rulesInputs.getMid().getTop2() * 10 + margin, height - margin);
             gc.strokeLine(margin, rulesInputs.getMid().getTop2()*10+margin, width, rulesInputs.getMid().getTop2()*10+margin);
         }
@@ -171,9 +316,7 @@ public class FXCanvas extends Application {
         if(rulesInputs.getHigh().getTop1() != rulesInputs.getMid().getEnd()){
             gc.strokeLine(rulesInputs.getHigh().getTop1() * 10 + margin, margin, rulesInputs.getHigh().getTop1() * 10 + margin, height - margin);
             gc.strokeLine(margin, rulesInputs.getHigh().getTop1()*10+margin, width, rulesInputs.getHigh().getTop1()*10+margin);
-        }
-
-        return rulesInputs;
+        }*/
     }
 
     private void drawMemFuncX(GraphicsContext gc, MemFunc memFunc, int margin, int height){

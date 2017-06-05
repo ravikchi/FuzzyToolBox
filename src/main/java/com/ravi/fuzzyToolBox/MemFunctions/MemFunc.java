@@ -9,6 +9,10 @@ public interface MemFunc {
     public double getRSupport();
     public double getStart();
 
+    public String getName() ;
+
+    public void setName(String name) ;
+
     public void setStart(double start) ;
 
     public double getTop1() ;

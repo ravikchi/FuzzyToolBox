@@ -5,21 +5,36 @@ import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by 611445924 on 29/05/2017.
  */
 public class RulesInputs {
     private FuzzySet x = new FuzzySetImpl(9);
     private FuzzySet y = new FuzzySetImpl(9);
+    private boolean type2 = false;
 
 
-    private MemFunc low = new TrapezoidalMemFunc(0, 0, 10, 20);
-    private MemFunc mid = new TrapezoidalMemFunc(11, 21, 30, 40);
-    private MemFunc high = new TrapezoidalMemFunc(31, 41, 50, 50);
+    private List<MemFunc> low = new ArrayList<MemFunc>();
+    private List<MemFunc> mid = new ArrayList<MemFunc>();
+    private List<MemFunc> high = new ArrayList<MemFunc>();
 
-    public RulesInputs(FuzzySet x, FuzzySet y) {
+    private MemFunc input;
+
+    public RulesInputs(FuzzySet x, FuzzySet y, double start) {
         this.x = x;
         this.y = y;
+        input = new TrapezoidalMemFunc("input",x.getLSupport(start), start, start, x.getRSupport(start));
+    }
+
+    public MemFunc getInput() {
+        return input;
+    }
+
+    public void setInput(MemFunc input) {
+        this.input = input;
     }
 
     public FuzzySet getX() {
@@ -38,27 +53,27 @@ public class RulesInputs {
         this.y = y;
     }
 
-    public MemFunc getLow() {
+    public List<MemFunc> getLow() {
         return low;
     }
 
-    public void setLow(MemFunc low) {
+    public void setLow(List<MemFunc> low) {
         this.low = low;
     }
 
-    public MemFunc getMid() {
+    public List<MemFunc> getMid() {
         return mid;
     }
 
-    public void setMid(MemFunc mid) {
+    public void setMid(List<MemFunc> mid) {
         this.mid = mid;
     }
 
-    public MemFunc getHigh() {
+    public List<MemFunc> getHigh() {
         return high;
     }
 
-    public void setHigh(MemFunc high) {
+    public void setHigh(List<MemFunc> high) {
         this.high = high;
     }
 }
