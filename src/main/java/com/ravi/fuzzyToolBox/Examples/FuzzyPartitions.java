@@ -46,37 +46,50 @@ public class FuzzyPartitions {
 
         this.counts = new int[rows][columns];
         this.noveltyCounts = new int[rows][columns];
+        List<Double> inputs = null;
         for(int i=0; i<counts.length; i++){
             for(int j=0; j<counts[i].length; j++) {
                 double[] lowerFiringLevels = new double[rules.size()];
-                List<Double> inputs = new ArrayList<Double>();
+                double[] upperFiringLevels = new double[rules.size()];
+
+                inputs = new ArrayList<Double>();
                 inputs.add((double) i);
                 inputs.add((double) j);
+
                 for (int k = 0; k < rules.size(); k++) {
                     Rule rule = rules.getRule(k);
                     Map<String, Double> firingLevel = rule.calculateFiringLevels(inputs, fzOperation);
 
-                    if(firingLevel.get("Regular") == null) {
-                        if(firingLevel.get("Upper") > 0 || firingLevel.get("Lower") > 0) {
-                            int rlCount = counts[i][j];
-                            rlCount++;
+                    if(firingLevel.get("Regular") != null && firingLevel.get("Regular") > 0) {
+                        int rlCount = counts[i][j];
+                        rlCount++;
 
-                            counts[i][j] = rlCount;
-                        }
+                        counts[i][j] = rlCount;
+                    }else if((firingLevel.get("Upper") != null && firingLevel.get("Upper") > 0) || (firingLevel.get("Lower") != null && firingLevel.get("Lower") > 0)) {
+                        int rlCount = counts[i][j];
+                        rlCount++;
 
-                        /*System.out.println(rule.getName());
-                        System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
-                        System.out.println(firingLevel.get("Upper"));
-                        System.out.println(firingLevel.get("Lower"));*/
-                    }else{
-                        if(firingLevel.get("Regular") > 0) {
-                            int rlCount = counts[i][j];
-                            rlCount++;
+                        counts[i][j] = rlCount;
 
-                            counts[i][j] = rlCount;
-                        }
+                        lowerFiringLevels[k] = firingLevel.get("Lower");
+                        upperFiringLevels[k] = firingLevel.get("Upper");
                     }
+
+                    /*System.out.println(rule.getName());
+                    System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
+                    System.out.println(firingLevel.get("Upper"));
+                    System.out.println(firingLevel.get("Lower"));*/
                 }
+
+                System.out.println(counts[i][j]);
+                for (int k = 0; k <lowerFiringLevels.length; k++) {
+                    System.out.print(lowerFiringLevels[k]+", ");
+                }
+                System.out.println();
+                for (int k = 0; k < upperFiringLevels.length; k++) {
+                    System.out.print(upperFiringLevels[k]+", ");
+                }
+                System.out.println();
             }
         }
 
