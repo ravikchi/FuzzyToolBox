@@ -6,7 +6,9 @@ import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.Tnorm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by 611445924 on 25/05/2017.
@@ -26,10 +28,18 @@ public class Antecedent {
         this.memFuncs.add(memFunc);
     }
 
-    public List<Double> getFiringLevel(double x, FZOperation fuzzyOperation){
-        List<Double> firingLevels = new ArrayList<Double>();
+    public Map<String, Double> getFiringLevel(double x, FZOperation fuzzyOperation){
+        Map<String, Double> firingLevels = new HashMap<String, Double>();
         for(MemFunc memFunc : memFuncs){
-            firingLevels.add(fuzzyOperation.run(input, memFunc, x));
+            String type = "";
+            if(memFunc.isType2() && memFunc.isUpper()){
+                type = "Upper";
+            }else if(memFunc.isType2()){
+                type = "Lower";
+            }else{
+                type = "Regular";
+            }
+            firingLevels.put(type, fuzzyOperation.run(input, memFunc, x));
         }
         return firingLevels;
     }

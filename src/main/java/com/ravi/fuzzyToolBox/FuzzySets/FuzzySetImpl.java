@@ -12,7 +12,7 @@ public class FuzzySetImpl implements FuzzySet {
     private MemFunc membershipFunction;
 
     public MemFunc getMembershipFunction(double value) {
-        return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value));
+        return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value), false, false);
     }
 
     public void setMembershipFunction(MemFunc membershipFunction) {

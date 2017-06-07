@@ -19,36 +19,45 @@ import java.util.Map;
  * Created by 611445924 on 24/05/2017.
  */
 public class FuzzyPartitions {
-    public int[][] getCount(Rules rules, FZOperation fzOperation) {
+
+    private int[][] counts;
+    private int[][] noveltyCounts;
+
+    private Rules rules;
+    private FZOperation fzOperation;
+
+    public FuzzyPartitions(Rules rules, FZOperation fzOperation) {
+        this.rules = rules;
+        this.fzOperation = fzOperation;
+        initCounts();
+    }
+
+    public int[][] getCounts() {
+        return counts;
+    }
+
+    public int[][] getNoveltyCounts() {
+        return noveltyCounts;
+    }
+
+    public void initCounts() {
         int columns = 50;
         int rows = 50;
 
-        int[][] counts = new int[rows][columns];
+        this.counts = new int[rows][columns];
+        this.noveltyCounts = new int[rows][columns];
         for(int i=0; i<counts.length; i++){
             for(int j=0; j<counts[i].length; j++) {
+                double[] lowerFiringLevels = new double[rules.size()];
+                List<Double> inputs = new ArrayList<Double>();
+                inputs.add((double) i);
+                inputs.add((double) j);
                 for (int k = 0; k < rules.size(); k++) {
                     Rule rule = rules.getRule(k);
-                    Antecedent antecedent = rule.getAntecedents().get(0);
-                    List<Double> firingLevel1 = antecedent.getFiringLevel(i, fzOperation);
-                    antecedent = rule.getAntecedents().get(1);
-                    List<Double> firingLevel2 = antecedent.getFiringLevel(j, fzOperation);
+                    Map<String, Double> firingLevel = rule.calculateFiringLevels(inputs, fzOperation);
 
-                    if(firingLevel1.size() > 0 && firingLevel2.size() > 0) {
-                        boolean fired1 = false;
-                        for(double fl : firingLevel1){
-                            if(fl > 0){
-                                fired1 = true;
-                            }
-                        }
-
-                        boolean fired2 = false;
-                        for(double fl : firingLevel2){
-                            if(fl > 0){
-                                fired2 = true;
-                            }
-                        }
-
-                        if(fired1 && fired2) {
+                    if(firingLevel.get("Regular") == null) {
+                        if(firingLevel.get("Upper") > 0 || firingLevel.get("Lower") > 0) {
                             int rlCount = counts[i][j];
                             rlCount++;
 
@@ -57,18 +66,23 @@ public class FuzzyPartitions {
 
                         /*System.out.println(rule.getName());
                         System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
-                        System.out.println(firingLevel1);
-                        System.out.println(firingLevel2);*/
+                        System.out.println(firingLevel.get("Upper"));
+                        System.out.println(firingLevel.get("Lower"));*/
+                    }else{
+                        if(firingLevel.get("Regular") > 0) {
+                            int rlCount = counts[i][j];
+                            rlCount++;
+
+                            counts[i][j] = rlCount;
+                        }
                     }
                 }
             }
         }
 
-        return counts;
-
     }
 
-    public Rules getRules(RulesInputs inputs){
+    public static Rules getRules(RulesInputs inputs){
 
         Rules rules = new Rules();
 

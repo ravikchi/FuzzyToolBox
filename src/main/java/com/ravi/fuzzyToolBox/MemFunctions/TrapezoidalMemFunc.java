@@ -9,13 +9,17 @@ public class TrapezoidalMemFunc implements MemFunc {
     private double top1;
     private double top2;
     private double end;
+    private boolean type2;
+    private boolean upper;
 
-    public TrapezoidalMemFunc(String name, double start, double top1, double top2, double end) {
+    public TrapezoidalMemFunc(String name, double start, double top1, double top2, double end, boolean type2, boolean upper) {
         this.name = name;
         this.start = start;
         this.top1 = top1;
         this.top2 = top2;
         this.end = end;
+        this.type2 = type2;
+        this.upper = upper;
     }
 
     public double getMemGrade(double x) {
@@ -43,6 +47,16 @@ public class TrapezoidalMemFunc implements MemFunc {
 
     public double getStart() {
         return start;
+    }
+
+    @Override
+    public boolean isUpper() {
+        return upper;
+    }
+
+    @Override
+    public boolean isType2() {
+        return type2;
     }
 
     public void setStart(double start) {

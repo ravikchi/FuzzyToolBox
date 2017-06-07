@@ -23,10 +23,14 @@ public class RulesInputs {
 
     private MemFunc input;
 
+    private List<MemFunc> lowConseqent = new ArrayList<MemFunc>();
+    private List<MemFunc> midConseqent = new ArrayList<MemFunc>();
+    private List<MemFunc> highConseqent = new ArrayList<MemFunc>();
+
     public RulesInputs(FuzzySet x, FuzzySet y, double start) {
         this.x = x;
         this.y = y;
-        input = new TrapezoidalMemFunc("input",x.getLSupport(start), start, start, x.getRSupport(start));
+        input = new TrapezoidalMemFunc("input",x.getLSupport(start), start, start, x.getRSupport(start), false, false);
     }
 
     public MemFunc getInput() {
@@ -75,5 +79,29 @@ public class RulesInputs {
 
     public void setHigh(List<MemFunc> high) {
         this.high = high;
+    }
+
+    public List<MemFunc> getLowConseqent() {
+        return lowConseqent;
+    }
+
+    public void setLowConseqent(List<MemFunc> lowConseqent) {
+        this.lowConseqent = lowConseqent;
+    }
+
+    public List<MemFunc> getMidConseqent() {
+        return midConseqent;
+    }
+
+    public void setMidConseqent(List<MemFunc> midConseqent) {
+        this.midConseqent = midConseqent;
+    }
+
+    public List<MemFunc> getHighConseqent() {
+        return highConseqent;
+    }
+
+    public void setHighConseqent(List<MemFunc> highConseqent) {
+        this.highConseqent = highConseqent;
     }
 }

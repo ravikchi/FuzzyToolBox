@@ -106,20 +106,20 @@ public class FXCanvas extends Application {
 
         RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(0), new FuzzySetImpl(0), 11);
         List<MemFunc> low = new ArrayList<MemFunc>();
-        MemFunc lowMem = new TrapezoidalMemFunc("low",0, 0, 10, 20);
-        MemFunc lowLower = new TrapezoidalMemFunc("low",0, 0, 10, 18);
+        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 9, 19, true, false);
+        MemFunc lowLower = new TrapezoidalMemFunc("lowUpper",0, 0, 11, 21, true, true);
         low.add(lowMem);
         low.add(lowLower);
 
         List<MemFunc> mid = new ArrayList<MemFunc>();
-        MemFunc midMem = new TrapezoidalMemFunc("mid",11, 21, 30, 40);
-        MemFunc midLower = new TrapezoidalMemFunc("mid",13, 21, 30, 38);
+        MemFunc midMem = new TrapezoidalMemFunc("midUpper",10, 20, 31, 41, true, true);
+        MemFunc midLower = new TrapezoidalMemFunc("midLower",12, 22, 29, 39, true, false);
         mid.add(midMem);
         mid.add(midLower);
 
         List<MemFunc> high = new ArrayList<MemFunc>();
-        MemFunc highMem = new TrapezoidalMemFunc("high",31, 41, 50, 50);
-        MemFunc highLower = new TrapezoidalMemFunc("high",33, 41, 50, 50);
+        MemFunc highMem = new TrapezoidalMemFunc("highUpper",30, 40, 50, 50, true, true);
+        MemFunc highLower = new TrapezoidalMemFunc("highLower",32, 42, 50, 50, true, false);
         high.add(highMem);
         high.add(highLower);
 
@@ -177,16 +177,29 @@ public class FXCanvas extends Application {
                         List<MemFunc> low = new ArrayList<MemFunc>();
                         List<MemFunc> mid = new ArrayList<MemFunc>();
                         List<MemFunc> high = new ArrayList<MemFunc>();
+                        List<MemFunc> lowC = new ArrayList<MemFunc>();
+                        List<MemFunc> midC = new ArrayList<MemFunc>();
+                        List<MemFunc> highC = new ArrayList<MemFunc>();
 
                         for(Object obj : table.getItems()){
                             if(obj instanceof MemFunc) {
                                 MemFunc memFunc = (MemFunc) obj;
-                                if(memFunc.getName().equalsIgnoreCase("low")){
-                                    low.add(memFunc);
-                                }else if(memFunc.getName().equalsIgnoreCase("mid")){
-                                    mid.add(memFunc);
-                                }else if(memFunc.getName().equalsIgnoreCase("high")){
-                                    high.add(memFunc);
+                                if(memFunc.getName().contains("Consequent")){
+                                    if (memFunc.getName().contains("low")) {
+                                        lowC.add(memFunc);
+                                    } else if (memFunc.getName().contains("mid")) {
+                                        midC.add(memFunc);
+                                    } else if (memFunc.getName().contains("high")) {
+                                        highC.add(memFunc);
+                                    }
+                                }else {
+                                    if (memFunc.getName().contains("low")) {
+                                        low.add(memFunc);
+                                    } else if (memFunc.getName().contains("mid")) {
+                                        mid.add(memFunc);
+                                    } else if (memFunc.getName().contains("high")) {
+                                        high.add(memFunc);
+                                    }
                                 }
                             }
                         }
@@ -194,6 +207,9 @@ public class FXCanvas extends Application {
                         rulesInputs.setLow(low);
                         rulesInputs.setMid(mid);
                         rulesInputs.setHigh(high);
+                        rulesInputs.setLowConseqent(lowC);
+                        rulesInputs.setMidConseqent(midC);
+                        rulesInputs.setHighConseqent(highC);
 
                         c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
                         getCanvas(width, height, margin, rulesInputs , c.getGraphicsContext2D());
@@ -214,10 +230,11 @@ public class FXCanvas extends Application {
         gc.strokeLine(margin, 0, margin, height);
         gc.strokeLine(0, height-margin, width, height-margin);
 
-        FuzzyPartitions partitions = new FuzzyPartitions();
-        Rules rules = partitions.getRules(rulesInputs);
+
+        Rules rules = FuzzyPartitions.getRules(rulesInputs);
         FZOperation fzOperation = new Tnorm();
-        int[][] counts = partitions.getCount(rules, fzOperation);
+        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
+        int[][] counts = partitions.getCounts();
 
 
         this.printResults(counts);
@@ -264,7 +281,7 @@ public class FXCanvas extends Application {
 
         for (int i = 0; i <= xCoords; i=i+5) {
             gc.strokeLine(margin-10, margin+i*10, margin, margin+i*10);
-            gc.fillText(i+"",margin-25,height-margin-i*10+5);
+            gc.fillText(i+"",margin-25,margin+i*10+5);
         }
 
     }
@@ -292,8 +309,8 @@ public class FXCanvas extends Application {
         gc.setStroke(Color.BROWN);
         drawMemFuncY(gc, rulesInputs.getInput(), margin, width);
 
-        drawSecondaryPartitions(rulesInputs.getLow().get(i), rulesInputs.getMid().get(0), gc);
-        drawSecondaryPartitions(rulesInputs.getMid().get(i), rulesInputs.getHigh().get(0), gc);
+        drawSecondaryPartitions(rulesInputs.getLow().get(i), rulesInputs.getMid().get(i), gc);
+        drawSecondaryPartitions(rulesInputs.getMid().get(i), rulesInputs.getHigh().get(i), gc);
     }
 
     private void drawSecondaryPartitions(MemFunc low, MemFunc mid, GraphicsContext gc){
@@ -307,16 +324,6 @@ public class FXCanvas extends Application {
             gc.strokeLine(mid.getTop1() * 10 + margin, margin, mid.getTop1() * 10 + margin, height - margin);
             gc.strokeLine(margin, mid.getTop1()*10+margin, width, mid.getTop1()*10+margin);
         }
-
-        /*if(rulesInputs.getMid().getTop2() != rulesInputs.getHigh().getStart()){
-            gc.strokeLine(rulesInputs.getMid().getTop2() * 10 + margin, margin, rulesInputs.getMid().getTop2() * 10 + margin, height - margin);
-            gc.strokeLine(margin, rulesInputs.getMid().getTop2()*10+margin, width, rulesInputs.getMid().getTop2()*10+margin);
-        }
-
-        if(rulesInputs.getHigh().getTop1() != rulesInputs.getMid().getEnd()){
-            gc.strokeLine(rulesInputs.getHigh().getTop1() * 10 + margin, margin, rulesInputs.getHigh().getTop1() * 10 + margin, height - margin);
-            gc.strokeLine(margin, rulesInputs.getHigh().getTop1()*10+margin, width, rulesInputs.getHigh().getTop1()*10+margin);
-        }*/
     }
 
     private void drawMemFuncX(GraphicsContext gc, MemFunc memFunc, int margin, int height){

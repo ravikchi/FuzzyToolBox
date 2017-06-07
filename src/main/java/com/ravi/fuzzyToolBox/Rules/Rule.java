@@ -4,8 +4,7 @@ import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by 611445924 on 25/05/2017.
@@ -39,11 +38,38 @@ public class Rule {
         this.consequents.add(consequent);
     }
 
-    public void calculateFiringLevels(List<Double> inputs, FZOperation fzOperation){
+    public double getClAvrgx(){
+        double avg = 0.0;
+        int n = 0;
+        for(Consequent consequent: consequents){
+
+            n++;
+        }
+
+        return avg/n;
+    }
+
+    public Map<String, Double> calculateFiringLevels(List<Double> inputs, FZOperation fzOperation){
+        Map<String, Double> firingLevel = new HashMap<String, Double>();
         for(int i=0; i<antecedents.size(); i++){
             Antecedent a = antecedents.get(i);
             double ipt = inputs.get(i);
-            a.getFiringLevel(ipt, fzOperation);
+
+            Map<String, Double> anteceentFL = a.getFiringLevel(ipt, fzOperation);
+
+            Iterator<String> it = anteceentFL.keySet().iterator();
+            while(it.hasNext()){
+                String key = it.next();
+                if(firingLevel.get(key) == null){
+                    firingLevel.put(key, anteceentFL.get(key));
+                }else{
+                    if(anteceentFL.get(key) < firingLevel.get(key)){
+                        firingLevel.put(key, anteceentFL.get(key));
+                    }
+                }
+            }
         }
+
+        return firingLevel;
     }
 }

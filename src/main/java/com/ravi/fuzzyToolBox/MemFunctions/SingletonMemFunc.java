@@ -30,6 +30,16 @@ public class SingletonMemFunc implements MemFunc {
         return 0;
     }
 
+    @Override
+    public boolean isUpper() {
+        return false;
+    }
+
+    @Override
+    public boolean isType2() {
+        return false;
+    }
+
     public void setStart(double start) {
 
     }
