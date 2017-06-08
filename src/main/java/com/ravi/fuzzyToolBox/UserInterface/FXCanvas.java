@@ -111,11 +111,25 @@ public class FXCanvas extends Application {
         low.add(lowMem);
         low.add(lowLower);
 
+        List<MemFunc> lowC = new ArrayList<MemFunc>();
+        List<MemFunc> midC = new ArrayList<MemFunc>();
+        List<MemFunc> highC = new ArrayList<MemFunc>();
+
+        MemFunc lowLowerConsequent = new TrapezoidalMemFunc("lowConsequent", 0, 0, 9, 19, true, false);
+        MemFunc lowUpperConsequent = new TrapezoidalMemFunc("lowUpperConsequent",0, 0, 11, 21, true, true);
+        lowC.add(lowLowerConsequent);
+        lowC.add(lowUpperConsequent);
+
         List<MemFunc> mid = new ArrayList<MemFunc>();
         MemFunc midMem = new TrapezoidalMemFunc("midUpper",10, 20, 31, 41, true, true);
         MemFunc midLower = new TrapezoidalMemFunc("midLower",12, 22, 29, 39, true, false);
         mid.add(midMem);
         mid.add(midLower);
+
+        MemFunc midLowerConsequent = new TrapezoidalMemFunc("midConsequent", 12, 22, 29, 39, true, false);
+        MemFunc midUpperConsequent = new TrapezoidalMemFunc("midUpperConsequent",10, 20, 31, 41, true, true);
+        midC.add(midLowerConsequent);
+        midC.add(midUpperConsequent);
 
         List<MemFunc> high = new ArrayList<MemFunc>();
         MemFunc highMem = new TrapezoidalMemFunc("highUpper",30, 40, 50, 50, true, true);
@@ -123,14 +137,26 @@ public class FXCanvas extends Application {
         high.add(highMem);
         high.add(highLower);
 
+        MemFunc highMemConsequent = new TrapezoidalMemFunc("highUpperConsequent",30, 40, 50, 50, true, true);
+        MemFunc highLowerConsequent = new TrapezoidalMemFunc("highLowerConsequent",32, 42, 50, 50, true, false);
+        highC.add(highMemConsequent);
+        highC.add(highLowerConsequent);
+
         rulesInputs.setLow(low);
         rulesInputs.setMid(mid);
         rulesInputs.setHigh(high);
+
+        rulesInputs.setLowConseqent(lowC);
+        rulesInputs.setMidConseqent(midC);
+        rulesInputs.setHighConseqent(highC);
 
         ObservableList<MemFunc> memFuncs = FXCollections.observableArrayList();
         memFuncs.addAll(low);
         memFuncs.addAll(mid);
         memFuncs.addAll(high);
+        memFuncs.addAll(lowC);
+        memFuncs.addAll(midC);
+        memFuncs.addAll(highC);
 
         table.setItems(memFuncs);
 
@@ -224,20 +250,19 @@ public class FXCanvas extends Application {
     }
 
     private RulesInputs getCanvas(int width, int height, int margin, RulesInputs rulesInputs, GraphicsContext gc){
+        Rules rules = FuzzyPartitions.getRules(rulesInputs);
+        FZOperation fzOperation = new Tnorm();
+        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
+        int[][] counts = partitions.getCounts();
 
         gc.setLineWidth(1.0);
 
         gc.strokeLine(margin, 0, margin, height);
         gc.strokeLine(0, height-margin, width, height-margin);
 
-
-        Rules rules = FuzzyPartitions.getRules(rulesInputs);
-        FZOperation fzOperation = new Tnorm();
-        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
-        int[][] counts = partitions.getCounts();
-
-
         this.printResults(counts);
+        this.printResults(partitions.getLowerNoveltyCounts());
+        this.printResults(partitions.getUpperNoveltyCounts());
         Map<Integer, List<String>> rectangles = this.findRectangles(counts);
 
 

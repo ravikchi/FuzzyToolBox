@@ -14,8 +14,8 @@ public class CentriodFind {
         double m1 = 4.25;
         double m2 = 5.75;
         double sigma = 1.0;
-        MemFunc upper = new GaussianMemFunc(m1, m2, sigma);
-        MemFunc lower = new GaussianMemFunc(m1+m2/2, m1+m2/2, sigma);
+        MemFunc upper = new GaussianMemFunc(m1, m2, sigma, true);
+        MemFunc lower = new GaussianMemFunc(m1, m2, sigma, false);
         Consequent consequent = new Consequent(upper, lower);
 
         System.out.println(CentriodIterMethod.getInstance().getCl(consequent));

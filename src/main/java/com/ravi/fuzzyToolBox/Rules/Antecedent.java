@@ -53,11 +53,11 @@ public class Antecedent {
         for(MemFunc memFunc : memFuncs){
             String type = "";
             if(memFunc.isType2() && memFunc.isUpper()){
-                type = "Upper";
+                type = Rule.upper;
             }else if(memFunc.isType2()){
-                type = "Lower";
+                type = Rule.lower;
             }else{
-                type = "Regular";
+                type = Rule.regular;
             }
             firingLevels.put(type, fuzzyOperation.run(input, memFunc, x));
         }

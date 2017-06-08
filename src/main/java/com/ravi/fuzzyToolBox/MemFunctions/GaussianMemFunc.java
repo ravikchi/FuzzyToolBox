@@ -8,10 +8,22 @@ public class GaussianMemFunc implements MemFunc {
     private double m2;
     private double sigma;
 
-    public GaussianMemFunc(double m1, double m2, double sigma) {
+    private boolean upper;
+
+    private double start;
+    private double top1;
+    private double top2;
+    private double end;
+
+
+    public GaussianMemFunc(double m1, double m2, double sigma, boolean upper) {
         this.m1 = m1;
         this.m2 = m2;
         this.sigma = sigma;
+        this.upper = upper;
+
+        this.start = m1 - sigma * 4;
+        this.end =  m2 + sigma * 4;
     }
 
     public double gaussianFunction(double m, double sigma, double x){
@@ -20,8 +32,7 @@ public class GaussianMemFunc implements MemFunc {
         return Math.exp(val);
     }
 
-    @Override
-    public double getMemGrade(double x) {
+    public double upperGrade(double x){
         if(x<m1)
             return gaussianFunction(m1,sigma,x);
         else if(x>m2)
@@ -30,6 +41,22 @@ public class GaussianMemFunc implements MemFunc {
             return 1.0;
 
         return 0.0;
+    }
+
+    public double lowerGrade(double x){
+        if((m1+m2)/2 >= x)
+            return gaussianFunction(m2, sigma, x);
+        else
+            return gaussianFunction(m1, sigma, x);
+    }
+
+    @Override
+    public double getMemGrade(double x) {
+        if(upper){
+            return upperGrade(x);
+        }else{
+            return lowerGrade(x);
+        }
     }
 
     @Override
@@ -69,36 +96,36 @@ public class GaussianMemFunc implements MemFunc {
 
     @Override
     public void setStart(double start) {
-
+        this.start = start;
     }
 
     @Override
     public double getTop1() {
-        return 0;
+        return top1;
     }
 
     @Override
     public void setTop1(double top1) {
-
+        this.top1 = top1;
     }
 
     @Override
     public double getTop2() {
-        return 0;
+        return top2;
     }
 
     @Override
     public void setTop2(double top2) {
-
+        this.top2 = top2;
     }
 
     @Override
     public double getEnd() {
-        return 0;
+        return end;
     }
 
     @Override
     public void setEnd(double end) {
-
+        this.end = end;
     }
 }

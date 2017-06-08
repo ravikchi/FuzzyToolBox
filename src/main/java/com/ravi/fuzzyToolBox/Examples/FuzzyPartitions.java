@@ -2,12 +2,13 @@ package com.ravi.fuzzyToolBox.Examples;
 
 import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.Rules.Antecedent;
+import com.ravi.fuzzyToolBox.Rules.Consequent;
 import com.ravi.fuzzyToolBox.Rules.Rule;
 import com.ravi.fuzzyToolBox.Rules.Rules;
+import com.ravi.fuzzyToolBox.TypeReduction.TypeReducer;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by 611445924 on 24/05/2017.
@@ -15,7 +16,8 @@ import java.util.Map;
 public class FuzzyPartitions {
 
     private int[][] counts;
-    private int[][] noveltyCounts;
+    private int[][] upperNoveltyCounts;
+    private int[][] lowerNoveltyCounts;
 
     private Rules rules;
     private FZOperation fzOperation;
@@ -30,8 +32,20 @@ public class FuzzyPartitions {
         return counts;
     }
 
-    public int[][] getNoveltyCounts() {
-        return noveltyCounts;
+    public int[][] getUpperNoveltyCounts() {
+        return upperNoveltyCounts;
+    }
+
+    public void setUpperNoveltyCounts(int[][] upperNoveltyCounts) {
+        this.upperNoveltyCounts = upperNoveltyCounts;
+    }
+
+    public int[][] getLowerNoveltyCounts() {
+        return lowerNoveltyCounts;
+    }
+
+    public void setLowerNoveltyCounts(int[][] lowerNoveltyCounts) {
+        this.lowerNoveltyCounts = lowerNoveltyCounts;
     }
 
     public void initCounts() {
@@ -39,7 +53,8 @@ public class FuzzyPartitions {
         int rows = 50;
 
         this.counts = new int[rows][columns];
-        this.noveltyCounts = new int[rows][columns];
+        this.upperNoveltyCounts = new int[rows][columns];
+        this.lowerNoveltyCounts = new int[rows][columns];
         List<Double> inputs = null;
         for(int i=0; i<counts.length; i++){
             for(int j=0; j<counts[i].length; j++) {
@@ -52,21 +67,21 @@ public class FuzzyPartitions {
 
                 for (int k = 0; k < rules.size(); k++) {
                     Rule rule = rules.getRule(k);
-                    Map<String, Double> firingLevel = rule.calculateFiringLevels(inputs, fzOperation);
+                    rule.calculateFiringLevels(inputs, fzOperation);
 
-                    if(firingLevel.get("Regular") != null && firingLevel.get("Regular") > 0) {
+                    if(!rule.isType2()) {
                         int rlCount = counts[i][j];
                         rlCount++;
 
                         counts[i][j] = rlCount;
-                    }else if((firingLevel.get("Upper") != null && firingLevel.get("Upper") > 0) || (firingLevel.get("Lower") != null && firingLevel.get("Lower") > 0)) {
+                    }else if(rule.getUpperFiringLevel() > 0 || rule.getLowerFiringLevel() > 0) {
                         int rlCount = counts[i][j];
                         rlCount++;
 
                         counts[i][j] = rlCount;
 
-                        lowerFiringLevels[k] = firingLevel.get("Lower");
-                        upperFiringLevels[k] = firingLevel.get("Upper");
+                        lowerFiringLevels[k] = rule.getLowerFiringLevel();
+                        upperFiringLevels[k] = rule.getUpperFiringLevel();
                     }
 
                     /*System.out.println(rule.getName());
@@ -75,17 +90,10 @@ public class FuzzyPartitions {
                     System.out.println(firingLevel.get("Lower"));*/
                 }
 
-                if(counts[i][j] >= 4) {
-                    System.out.println(counts[i][j]);
-                    for (int k = 0; k < lowerFiringLevels.length; k++) {
-                        System.out.print(lowerFiringLevels[k] + ", ");
-                    }
-                    System.out.println();
-                    for (int k = 0; k < upperFiringLevels.length; k++) {
-                        System.out.print(upperFiringLevels[k] + ", ");
-                    }
-                    System.out.println();
-                }
+                TypeReducer typeReducer = new TypeReducer(rules.getRules());
+
+                lowerNoveltyCounts[i][j] = typeReducer.ylR();
+                upperNoveltyCounts[i][j] = typeReducer.yrR();
             }
         }
 
@@ -98,47 +106,56 @@ public class FuzzyPartitions {
         Rule rule = new Rule("Low x1, low x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Low x1, mid x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Low x1, high x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addConsequent(new Consequent(inputs.getHighConseqent()));
         rules.addRule(rule);
 
 
         rule = new Rule("Mid x1, low x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Mid x1, mid x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Mid x1, high x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, low x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, mid x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addConsequent(new Consequent(inputs.getHighConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, high x2");
         rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
         rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addConsequent(new Consequent(inputs.getHighConseqent()));
         rules.addRule(rule);
 
         return rules;
