@@ -28,6 +28,26 @@ public class Antecedent {
         this.memFuncs.add(memFunc);
     }
 
+    public MemFunc getUpperMemFunction(){
+        for(MemFunc memFunc : memFuncs){
+            if(memFunc.isUpper()){
+                return memFunc;
+            }
+        }
+
+        return null;
+    }
+
+    public MemFunc getLowerMemFunction(){
+        for(MemFunc memFunc : memFuncs){
+            if(memFunc.isType2() && ! memFunc.isUpper()){
+                return memFunc;
+            }
+        }
+
+        return null;
+    }
+
     public Map<String, Double> getFiringLevel(double x, FZOperation fuzzyOperation){
         Map<String, Double> firingLevels = new HashMap<String, Double>();
         for(MemFunc memFunc : memFuncs){

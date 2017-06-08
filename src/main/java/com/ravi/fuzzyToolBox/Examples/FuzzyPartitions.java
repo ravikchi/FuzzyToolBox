@@ -1,17 +1,11 @@
 package com.ravi.fuzzyToolBox.Examples;
 
 import com.ravi.fuzzyToolBox.FZOperation;
-import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
-import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
-import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
-import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 import com.ravi.fuzzyToolBox.Rules.Antecedent;
 import com.ravi.fuzzyToolBox.Rules.Rule;
 import com.ravi.fuzzyToolBox.Rules.Rules;
-import com.ravi.fuzzyToolBox.Tnorm;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -81,15 +75,17 @@ public class FuzzyPartitions {
                     System.out.println(firingLevel.get("Lower"));*/
                 }
 
-                System.out.println(counts[i][j]);
-                for (int k = 0; k <lowerFiringLevels.length; k++) {
-                    System.out.print(lowerFiringLevels[k]+", ");
+                if(counts[i][j] >= 4) {
+                    System.out.println(counts[i][j]);
+                    for (int k = 0; k < lowerFiringLevels.length; k++) {
+                        System.out.print(lowerFiringLevels[k] + ", ");
+                    }
+                    System.out.println();
+                    for (int k = 0; k < upperFiringLevels.length; k++) {
+                        System.out.print(upperFiringLevels[k] + ", ");
+                    }
+                    System.out.println();
                 }
-                System.out.println();
-                for (int k = 0; k < upperFiringLevels.length; k++) {
-                    System.out.print(upperFiringLevels[k]+", ");
-                }
-                System.out.println();
             }
         }
 
