@@ -84,9 +84,10 @@ public class Rule {
                 if(firingLevel.get(key) == null){
                     firingLevel.put(key, anteceentFL.get(key));
                 }else{
-                    if(anteceentFL.get(key) < firingLevel.get(key)){
+                   /* if(anteceentFL.get(key) < firingLevel.get(key)){
                         firingLevel.put(key, anteceentFL.get(key));
-                    }
+                    }*/
+                    firingLevel.put(key, fzOperation.operation(firingLevel.get(key), anteceentFL.get(key)));
                 }
             }
         }

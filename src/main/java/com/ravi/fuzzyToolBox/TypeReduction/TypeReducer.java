@@ -10,6 +10,8 @@ import java.util.*;
 public class TypeReducer {
     private Map<Double, Rule> ruleMapy;
     private Map<Double, Rule> ruleMapx;
+    private Map<Double, Integer> ruleMapOrderx;
+    private Map<Double, Integer> ruleMapOrdery;
     private List<Double> yrk;
     private List<Double> ylk;
 
@@ -17,19 +19,25 @@ public class TypeReducer {
         ruleMapx = new HashMap<Double, Rule>();
         ruleMapy = new HashMap<Double, Rule>();
 
+        ruleMapOrderx = new HashMap<Double, Integer>();
+        ruleMapOrdery = new HashMap<Double, Integer>();
+
         yrk = new ArrayList<Double>();
         ylk = new ArrayList<Double>();
 
         double addValue = 0.0000000001;
         int count = 0;
         for(Rule rule : ruleList){
-            if(rule.getUpperFiringLevel() > 0 || rule.getLowerFiringLevel() > 0) {
+            System.out.println((rule.getClAvg()+(addValue*count)) + " "+ (rule.getCrAvg()+(addValue*count)) + ", is "+rule.getLowerFiringLevel() + ","+rule.getUpperFiringLevel());
+            if(rule.getLowerFiringLevel() > 0 || rule.getUpperFiringLevel() > 0) {
                 ruleMapx.put(rule.getClAvg() + addValue * count, rule);
                 ruleMapy.put(rule.getCrAvg() + addValue * count, rule);
+                ruleMapOrderx.put(rule.getClAvg() + addValue * count, count);
+                ruleMapOrdery.put(rule.getCrAvg() + addValue * count, count);
 
-                System.out.println((rule.getClAvg()+(addValue*count)) + " "+ (rule.getCrAvg()+(addValue*count)) + ", is "+rule.getLowerFiringLevel() + ","+rule.getUpperFiringLevel());
                 count++;
             }
+
         }
 
         yrk.addAll(ruleMapy.keySet());
@@ -45,6 +53,34 @@ public class TypeReducer {
         this.yrk = yrk;
         this.ylk = ylk;
     }
+
+    public int ylR(){
+        double ylkQuote = step1(ylk, ruleMapx);
+
+        int R = 0;
+        boolean test = true;
+        while(test) {
+            R = findR(ylk, ylkQuote);
+
+            double ylkDQuote = step3l(ylk, ruleMapx, R);
+
+            if(Math.abs(ylkQuote - ylkDQuote) < 0.000000001){
+                test = false;
+                break;
+            }else{
+                ylkQuote = ylkDQuote;
+            }
+        }
+
+        /*if(ylk.size() >= R){
+            return ruleMapOrderx.get(ylk.get(ylk.size()-1));
+        }else {
+            return ruleMapOrderx.get(ylk.get(R));
+        }*/
+
+        return R;
+    }
+
 
     public double ylk(){
         double ylkQuote = step1(ylk, ruleMapx);
@@ -66,22 +102,29 @@ public class TypeReducer {
         return ylkQuote;
     }
 
-    public int ylR(){
-        double ylkQuote = step1(ylk, ruleMapx);
-        int R = 0;
+    public int yrR(){
+        double yrkQuote = step1(yrk, ruleMapy);
+
+        int R =0;
         boolean test = true;
         while(test) {
-            R = findR(ylk, ylkQuote);
+            R = findR(yrk, yrkQuote);
 
-            double ylkDQuote = step3l(ylk, ruleMapx, R);
+            double yrkDQuote = step3(yrk, ruleMapy, R);
 
-            if(Math.abs(ylkQuote - ylkDQuote) < 0.000000001){
+            if(Math.abs(yrkQuote -yrkDQuote)<0.000000001){
                 test = false;
                 break;
             }else{
-                ylkQuote = ylkDQuote;
+                yrkQuote = yrkDQuote;
             }
         }
+
+        /*if(yrk.size() >= R){
+            return ruleMapOrdery.get(yrk.get(yrk.size()-1));
+        }else {
+            return ruleMapOrdery.get(yrk.get(R));
+        }*/
 
         return R;
     }
@@ -104,28 +147,6 @@ public class TypeReducer {
         }
 
         return yrkQuote;
-    }
-
-    public int yrR(){
-        double yrkQuote = step1(yrk, ruleMapy);
-
-        int R = 0;
-
-        boolean test = true;
-        while(test) {
-            R = findR(yrk, yrkQuote);
-
-            double yrkDQuote = step3(yrk, ruleMapy, R);
-
-            if(Math.abs(yrkQuote -yrkDQuote)<0.000000001){
-                test = false;
-                break;
-            }else{
-                yrkQuote = yrkDQuote;
-            }
-        }
-
-        return R;
     }
 
     public double  step3(List<Double> yrk, Map<Double, Rule> ruleMap, int R){
@@ -172,9 +193,9 @@ public class TypeReducer {
 
             double fli = 0.0;
             if(count<=R){
-                fli = ruleRow.getLowerFiringLevel();
-            }else{
                 fli = ruleRow.getUpperFiringLevel();
+            }else{
+                fli = ruleRow.getLowerFiringLevel();
             }
 
             num = num + fli * yi;
@@ -223,7 +244,7 @@ public class TypeReducer {
             if(yk.size() == R){
                 break;
             }
-            if(yi<yrkQuote && yk.get(R)>yrkQuote){
+            if(yi<=yrkQuote && yk.get(R)>=yrkQuote){
                 break;
             }
             R++;

@@ -3,15 +3,12 @@ package com.ravi.fuzzyToolBox;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 /**
- * Created by 611445924 on 25/05/2017.
+ * Created by 611445924 on 08/06/2017.
  */
-public class Tnorm implements FZOperation {
-    public double run(FuzzySet input, MemFunc memFunc, double x){
+public class ProductTnorm implements FZOperation {
+    @Override
+    public double run(FuzzySet input, MemFunc memFunc, double x) {
         double value = 0.0;
         if(input.getLSupport() == input.getRSupport()){
             value = memFunc.getMemGrade(x);
@@ -32,13 +29,12 @@ public class Tnorm implements FZOperation {
 
     @Override
     public double run(MemFunc memFunc, MemFunc memFunc1, double x) {
-        return Math.min(memFunc.getMemGrade(x), memFunc1.getMemGrade(x));
+        return memFunc.getMemGrade(x) * memFunc1.getMemGrade(x);
+
     }
 
     @Override
     public double operation(double x, double y) {
-        return Math.min(x, y);
+        return x * y;
     }
-
-
 }

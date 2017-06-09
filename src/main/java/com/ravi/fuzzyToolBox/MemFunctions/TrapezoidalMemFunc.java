@@ -23,16 +23,18 @@ public class TrapezoidalMemFunc implements MemFunc {
     }
 
     public double getMemGrade(double x) {
-        double value = 0.0;
-        if(start >= x || end <= x ){
-            value = 0.0;
-        }else if(x < top1) {
-            value = (x-start)/(top1 -start);
-        }else if(top1<= x && x <= top2){
-            value = 1.0;
-        }else if(x > top2){
-            value = (end - x)/(end - top2);
+        if(start > x || end < x ){
+            return 0.0;
         }
+
+        double value = 0.0;
+         if(top1<= x && x <= top2){
+            value = 1.0;
+        }else if(x < top1) {
+             value = (x - start) / (top1 - start);
+        }else if(x > top2){
+             value = (end - x)/(end - top2);
+         }
 
         return value;
     }
