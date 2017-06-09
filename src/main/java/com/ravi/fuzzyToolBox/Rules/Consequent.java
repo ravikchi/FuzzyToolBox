@@ -39,6 +39,14 @@ public class Consequent {
         return elements;
     }
 
+    public boolean isType2() {
+        return isType2;
+    }
+
+    public void setType2(boolean type2) {
+        isType2 = type2;
+    }
+
     public Consequent(List<MemFunc> memFuncs) {
         for(MemFunc memFunc : memFuncs) {
             if(memFunc.isType2()) {

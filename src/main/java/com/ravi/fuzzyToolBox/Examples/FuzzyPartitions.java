@@ -58,7 +58,7 @@ public class FuzzyPartitions {
         List<Double> inputs = null;
         for(int i=0; i<counts.length; i++){
             for(int j=0; j<counts[i].length; j++) {
-                System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
+                //System.out.println(" Input levels 1 : "+i+" input level 2 : "+j);
 
                 double[] lowerFiringLevels = new double[rules.size()];
                 double[] upperFiringLevels = new double[rules.size()];
@@ -66,6 +66,8 @@ public class FuzzyPartitions {
                 inputs = new ArrayList<Double>();
                 inputs.add((double) i);
                 inputs.add((double) j);
+
+                List<Rule> triggeredRules = new ArrayList<Rule>();
 
                 for (int k = 0; k < rules.size(); k++) {
                     Rule rule = rules.getRule(k);
@@ -84,17 +86,69 @@ public class FuzzyPartitions {
 
                         lowerFiringLevels[k] = rule.getLowerFiringLevel();
                         upperFiringLevels[k] = rule.getUpperFiringLevel();
+                        triggeredRules.add(rule);
                     }
 
-                    System.out.println(rule.getName());
+                    /*System.out.println(rule.getName());
                     System.out.println(rule.getUpperFiringLevel());
-                    System.out.println(rule.getLowerFiringLevel());
+                    System.out.println(rule.getLowerFiringLevel());*/
+                }
+
+                if(i==11 && j == 40){
+                    System.out.println("test");
                 }
 
                 TypeReducer typeReducer = new TypeReducer(rules.getRules());
 
-                lowerNoveltyCounts[i][j]=typeReducer.ylR();
-                upperNoveltyCounts[i][j]=typeReducer.yrR();
+                /*lowerNoveltyCounts[i][j]=typeReducer.ylR();
+                upperNoveltyCounts[i][j]=typeReducer.yrR();*/
+
+                double minYl = Double.MAX_VALUE;
+                double minYr = Double.MAX_VALUE;
+                int l = 0;
+                int r = 0;
+                for (int k = 0; k <= triggeredRules.size(); k++) {
+                    double ylN = 0.0;
+                    double ylD = 0.0;
+
+                    double yrN = 0.0;
+                    double yrD = 0.0;
+                    for (int t = 0; t < triggeredRules.size(); t++) {
+                        if(t<k) {
+                            ylN = ylN + triggeredRules.get(t).getCrAvg() * triggeredRules.get(t).getUpperFiringLevel();
+                            ylD = ylD + triggeredRules.get(t).getUpperFiringLevel();
+                        }else{
+                            ylN = ylN + triggeredRules.get(t).getCrAvg() * triggeredRules.get(t).getLowerFiringLevel();
+                            ylD = ylD + triggeredRules.get(t).getLowerFiringLevel();
+                        }
+                    }
+
+                    for (int t = 0; t < triggeredRules.size(); t++) {
+                        if(t < k) {
+                            yrN = yrN + triggeredRules.get(t).getClAvg() * triggeredRules.get(t).getLowerFiringLevel();
+                            yrD = yrD + triggeredRules.get(t).getLowerFiringLevel();
+                        }else{
+                            yrN = yrN + triggeredRules.get(t).getClAvg() * triggeredRules.get(t).getUpperFiringLevel();
+                            yrD = yrD + triggeredRules.get(t).getUpperFiringLevel();
+                        }
+                    }
+
+                    double yl = ylN/ylD;
+                    double yr = yrN/yrD;
+
+                    if(minYl >= yl){
+                        minYl = yl;
+                        l = k;
+                    }
+
+                    if(minYr >= yr){
+                        minYr = yr;
+                        r = k;
+                    }
+                }
+
+                lowerNoveltyCounts[i][j] = l;
+                upperNoveltyCounts[i][j] = r;
             }
         }
 

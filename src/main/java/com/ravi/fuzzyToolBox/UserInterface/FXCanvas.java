@@ -186,7 +186,15 @@ public class FXCanvas extends Application {
     private void prepareCanvas(RulesInputs rulesInputs){
         canvas.setId("canv");
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        getCanvas(width, height, margin, rulesInputs, gc);
+
+        Rules rules = FuzzyPartitions.getRules(rulesInputs);
+        FZOperation fzOperation = new Tnorm();
+        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
+        this.printResults(partitions.getCounts());
+        this.printResults(partitions.getLowerNoveltyCounts());
+        this.printResults(partitions.getUpperNoveltyCounts());
+
+        getCanvas(width, height, margin, rulesInputs, partitions, gc);
         canvas.setOnMouseClicked(new EventHandler<MouseEvent>() {
             public void handle(MouseEvent mouseEvent) {
                 if(mouseEvent.getSource() instanceof Canvas){
@@ -238,7 +246,12 @@ public class FXCanvas extends Application {
                         rulesInputs.setHighConseqent(highC);
 
                         c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
-                        getCanvas(width, height, margin, rulesInputs , c.getGraphicsContext2D());
+
+                        Rules rules = FuzzyPartitions.getRules(rulesInputs);
+                        FZOperation fzOperation = new Tnorm();
+                        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
+
+                        getCanvas(width, height, margin, rulesInputs, partitions, c.getGraphicsContext2D());
 
                     }catch(NumberFormatException nfe){
                         c.getGraphicsContext2D().setFill(Color.RED);
@@ -249,10 +262,8 @@ public class FXCanvas extends Application {
         });
     }
 
-    private RulesInputs getCanvas(int width, int height, int margin, RulesInputs rulesInputs, GraphicsContext gc){
-        Rules rules = FuzzyPartitions.getRules(rulesInputs);
-        FZOperation fzOperation = new Tnorm();
-        FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
+    private RulesInputs getCanvas(int width, int height, int margin, RulesInputs rulesInputs, FuzzyPartitions partitions, GraphicsContext gc){
+
         int[][] counts = partitions.getCounts();
 
         gc.setLineWidth(1.0);
@@ -260,9 +271,7 @@ public class FXCanvas extends Application {
         gc.strokeLine(margin, 0, margin, height);
         gc.strokeLine(0, height-margin, width, height-margin);
 
-        this.printResults(counts);
-        this.printResults(partitions.getLowerNoveltyCounts());
-        this.printResults(partitions.getUpperNoveltyCounts());
+
         Map<Integer, List<String>> rectangles = this.findRectangles(counts);
 
 

@@ -124,7 +124,11 @@ public class Rule {
         double cl = 0;
         int n = 0;
         for (Consequent consequent: consequents) {
-            cl = cl + CentriodIterMethod.getInstance().getCl(consequent);
+            if(consequent.isType2()) {
+                cl = cl + CentriodIterMethod.getInstance().getCl(consequent);
+            }else{
+                cl = cl + (consequent.getMemFunc().getTop1() + consequent.getMemFunc().getTop2() )/2;
+            }
             n++;
         }
 
@@ -139,7 +143,11 @@ public class Rule {
         double cr = 0;
         int n = 0;
         for (Consequent consequent: consequents) {
-            cr = cr + CentriodIterMethod.getInstance().getCr(consequent);
+            if(consequent.isType2()) {
+                cr = cr + CentriodIterMethod.getInstance().getCr(consequent);
+            }else{
+                cr = cr + (consequent.getMemFunc().getTop1() + consequent.getMemFunc().getTop2())/2;
+            }
             n++;
         }
 
