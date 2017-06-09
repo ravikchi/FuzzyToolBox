@@ -6,6 +6,7 @@ import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
+import com.ravi.fuzzyToolBox.ProductTnorm;
 import com.ravi.fuzzyToolBox.Rules.Rules;
 import com.ravi.fuzzyToolBox.Tnorm;
 import javafx.application.Application;
@@ -248,7 +249,7 @@ public class FXCanvas extends Application {
                         c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
 
                         Rules rules = FuzzyPartitions.getRules(rulesInputs);
-                        FZOperation fzOperation = new Tnorm();
+                        FZOperation fzOperation = new ProductTnorm();
                         FuzzyPartitions partitions = new FuzzyPartitions(rules, fzOperation);
 
                         getCanvas(width, height, margin, rulesInputs, partitions, c.getGraphicsContext2D());
