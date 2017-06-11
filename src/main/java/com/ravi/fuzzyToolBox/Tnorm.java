@@ -36,6 +36,20 @@ public class Tnorm implements FZOperation {
     }
 
     @Override
+    public double run(FuzzySet input, MemFunc memFunc) {
+        double value = 0.0;
+
+        for (double i = Math.min(memFunc.getLSupport(), input.getLSupport()); i < Math.max(memFunc.getRSupport(), input.getRSupport()) ; i++) {
+            double grade = Math.min(memFunc.getMemGrade(i),input.getMembershipFunction().getMemGrade(i));
+            if(grade > value){
+                value = grade;
+            }
+        }
+
+        return value;
+    }
+
+    @Override
     public double operation(double x, double y) {
         return Math.min(x, y);
     }

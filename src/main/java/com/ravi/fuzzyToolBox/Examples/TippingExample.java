@@ -5,10 +5,9 @@ import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 import com.ravi.fuzzyToolBox.ProductTnorm;
-import com.ravi.fuzzyToolBox.Rules.Antecedent;
+import com.ravi.fuzzyToolBox.Rules.AntecedentOld;
 import com.ravi.fuzzyToolBox.Rules.Consequent;
 import com.ravi.fuzzyToolBox.Rules.Rule;
-import com.ravi.fuzzyToolBox.Tnorm;
 import com.ravi.fuzzyToolBox.TypeReduction.TypeReducer;
 
 import java.util.ArrayList;
@@ -68,43 +67,43 @@ public class TippingExample {
 
         Rule rule = new Rule("1");
 
-        rule.addAntecedent(new Antecedent(inputX, rancid));
-        rule.addAntecedent(new Antecedent(inputY, poorService));
+        rule.addAntecedent(new AntecedentOld(inputX, rancid));
+        rule.addAntecedent(new AntecedentOld(inputY, poorService));
         rule.addConsequent(new Consequent(cheapTip));
         ruleList.add(rule);
 
         rule = new Rule("2");
 
-        rule.addAntecedent(new Antecedent(inputX, rancid));
-        rule.addAntecedent(new Antecedent(inputY, goodService));
+        rule.addAntecedent(new AntecedentOld(inputX, rancid));
+        rule.addAntecedent(new AntecedentOld(inputY, goodService));
         rule.addConsequent(new Consequent(cheapTip));
         ruleList.add(rule);
 
         rule = new Rule("3");
 
-        rule.addAntecedent(new Antecedent(inputX, rancid));
-        rule.addAntecedent(new Antecedent(inputY, excellentService));
+        rule.addAntecedent(new AntecedentOld(inputX, rancid));
+        rule.addAntecedent(new AntecedentOld(inputY, excellentService));
         rule.addConsequent(new Consequent(averageTip));
         ruleList.add(rule);
 
         rule = new Rule("4");
 
-        rule.addAntecedent(new Antecedent(inputX, delicious));
-        rule.addAntecedent(new Antecedent(inputY, poorService));
+        rule.addAntecedent(new AntecedentOld(inputX, delicious));
+        rule.addAntecedent(new AntecedentOld(inputY, poorService));
         rule.addConsequent(new Consequent(averageTip));
         ruleList.add(rule);
 
         rule = new Rule("5");
 
-        rule.addAntecedent(new Antecedent(inputX, delicious));
-        rule.addAntecedent(new Antecedent(inputY, goodService));
+        rule.addAntecedent(new AntecedentOld(inputX, delicious));
+        rule.addAntecedent(new AntecedentOld(inputY, goodService));
         rule.addConsequent(new Consequent(averageTip));
         ruleList.add(rule);
 
         rule = new Rule("6");
 
-        rule.addAntecedent(new Antecedent(inputX, delicious));
-        rule.addAntecedent(new Antecedent(inputY, excellentService));
+        rule.addAntecedent(new AntecedentOld(inputX, delicious));
+        rule.addAntecedent(new AntecedentOld(inputY, excellentService));
         rule.addConsequent(new Consequent(generousTip));
         ruleList.add(rule);
 

@@ -15,6 +15,11 @@ public class FuzzySetImpl implements FuzzySet {
         return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value), false, false);
     }
 
+    @Override
+    public MemFunc getMembershipFunction() {
+        return null;
+    }
+
     public void setMembershipFunction(MemFunc membershipFunction) {
         this.membershipFunction = membershipFunction;
     }
@@ -41,5 +46,10 @@ public class FuzzySetImpl implements FuzzySet {
 
     public void setValue(double value) {
         this.value = value;
+    }
+
+    @Override
+    public double getValue() {
+        return this.value;
     }
 }

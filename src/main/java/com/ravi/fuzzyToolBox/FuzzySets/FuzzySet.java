@@ -12,6 +12,8 @@ public interface FuzzySet {
     public double getLSupport();
     public double getRSupport();
     public void setValue(double value);
+    public double getValue();
     public MemFunc getMembershipFunction(double value);
+    public MemFunc getMembershipFunction();
     public void setMembershipFunction(MemFunc membershipFunction);
 }

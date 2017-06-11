@@ -11,5 +11,6 @@ import java.util.List;
 public interface FZOperation {
     public double run(FuzzySet input, MemFunc memFunc, double x);
     public double run(MemFunc memFunc, MemFunc memFunc1, double x);
+    public double run(FuzzySet input, MemFunc memFunc);
     public double operation(double x, double y);
 }

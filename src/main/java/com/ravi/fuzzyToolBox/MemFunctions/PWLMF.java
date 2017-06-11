@@ -9,11 +9,11 @@ public class PWLMF implements MemFunc{
     private double top1;
     private double top2;
     private double end;
-    private boolean type2;
-    private boolean upper;
+    private boolean type2 = true;
+    private boolean upper = true;
 
-    private double y1;
-    private double y2;
+    private double y1 = 0.0;
+    private double y2 = 1.0;
 
     public PWLMF(String name, double start, double top1, double top2, double end, boolean type2, boolean upper, double y1, double y2) {
         this.name = name;
@@ -25,6 +25,34 @@ public class PWLMF implements MemFunc{
         this.upper = upper;
         this.y1 = y1;
         this.y2 = y2;
+    }
+
+    public PWLMF(String name, double start, double top1, double top2, double end, double y1, double y2) {
+        this.name = name;
+        this.start = start;
+        this.top1 = top1;
+        this.top2 = top2;
+        this.end = end;
+        this.upper = false;
+        this.y1 = y1;
+        this.y2 = y2;
+    }
+
+    public PWLMF(String name, double start, double top1, double top2, double end) {
+        this.name = name;
+        this.start = start;
+        this.top1 = top1;
+        this.top2 = top2;
+        this.end = end;
+    }
+
+    public PWLMF(String name, double start, double top1, double top2, double end, boolean upper) {
+        this.name = name;
+        this.start = start;
+        this.top1 = top1;
+        this.top2 = top2;
+        this.end = end;
+        this.upper = false;
     }
 
     @Override
@@ -65,7 +93,7 @@ public class PWLMF implements MemFunc{
         }else if(x < top1) {
             value = (y2-y1) * (x - start) / (top1 - start) + y1;
         }else if(x > top2){
-            value = (y2-y1) * (end - x)/(end - top2) + y2;
+            value = (y2-y1) * (end - x)/(end - top2) + y1;
         }
 
         return value;

@@ -22,6 +22,25 @@ public class Consequent {
         this.isType2 = true;
     }
 
+    public Consequent(List<MemFunc> memFuncs) {
+        for(MemFunc memFunc : memFuncs) {
+            if(memFunc.isType2()) {
+                this.isType2 = true;
+                if (memFunc.isUpper()) {
+                    this.upperMemFunc = memFunc;
+                }else{
+                    this.lowerMemFunc = memFunc;
+                }
+            }else {
+                this.memFunc = memFunc;
+            }
+        }
+    }
+
+    public Consequent(MemFunc memFunc) {
+        this.memFunc = memFunc;
+    }
+
     public List<Double> getElements(int n){
         if(elements == null){
             elements = new ArrayList<Double>();
@@ -45,21 +64,6 @@ public class Consequent {
 
     public void setType2(boolean type2) {
         isType2 = type2;
-    }
-
-    public Consequent(List<MemFunc> memFuncs) {
-        for(MemFunc memFunc : memFuncs) {
-            if(memFunc.isType2()) {
-                this.isType2 = true;
-                if (memFunc.isUpper()) {
-                    this.upperMemFunc = memFunc;
-                }else{
-                    this.lowerMemFunc = memFunc;
-                }
-            }else {
-                this.memFunc = memFunc;
-            }
-        }
     }
 
     public MemFunc getUpperMemFunc() {

@@ -15,7 +15,7 @@ public class ProductTnorm implements FZOperation {
         }else{
             double maxGrade = 0.0;
             for (double i = Math.min(memFunc.getLSupport(), input.getLSupport(x)); i < Math.max(memFunc.getRSupport(), input.getRSupport(x)) ; i++) {
-                double grade = Math.min(memFunc.getMemGrade(i), input.getMembershipFunction(x).getMemGrade(i));
+                double grade = memFunc.getMemGrade(i) * input.getMembershipFunction(x).getMemGrade(i);
                 if(grade > maxGrade){
                     maxGrade = grade;
                 }
@@ -31,6 +31,24 @@ public class ProductTnorm implements FZOperation {
     public double run(MemFunc memFunc, MemFunc memFunc1, double x) {
         return memFunc.getMemGrade(x) * memFunc1.getMemGrade(x);
 
+    }
+
+    @Override
+    public double run(FuzzySet input, MemFunc memFunc) {
+        double value = 0.0;
+
+        if(input.getLSupport() == input.getRSupport()){
+            value = memFunc.getMemGrade(input.getValue());
+        }else {
+            for (double i = Math.min(memFunc.getLSupport(), input.getLSupport()); i < Math.max(memFunc.getRSupport(), input.getRSupport()); i++) {
+                double grade = memFunc.getMemGrade(i) * input.getMembershipFunction().getMemGrade(i);
+                if (grade > value) {
+                    value = grade;
+                }
+            }
+        }
+
+        return value;
     }
 
     @Override

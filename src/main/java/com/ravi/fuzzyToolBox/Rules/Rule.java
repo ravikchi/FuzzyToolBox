@@ -1,8 +1,6 @@
 package com.ravi.fuzzyToolBox.Rules;
 
 import com.ravi.fuzzyToolBox.FZOperation;
-import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
-import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.TypeReduction.CentriodIterMethod;
 
 import java.util.*;

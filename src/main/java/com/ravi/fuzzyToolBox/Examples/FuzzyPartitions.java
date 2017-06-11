@@ -1,7 +1,7 @@
 package com.ravi.fuzzyToolBox.Examples;
 
 import com.ravi.fuzzyToolBox.FZOperation;
-import com.ravi.fuzzyToolBox.Rules.Antecedent;
+import com.ravi.fuzzyToolBox.Rules.AntecedentOld;
 import com.ravi.fuzzyToolBox.Rules.Consequent;
 import com.ravi.fuzzyToolBox.Rules.Rule;
 import com.ravi.fuzzyToolBox.Rules.Rules;
@@ -159,57 +159,57 @@ public class FuzzyPartitions {
         Rules rules = new Rules();
 
         Rule rule = new Rule("Low x1, low x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getLow()));
         rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Low x1, mid x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getMid()));
         rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Low x1, high x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getLow()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getHigh()));
         rule.addConsequent(new Consequent(inputs.getLowConseqent()));
         rules.addRule(rule);
 
 
         rule = new Rule("Mid x1, low x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getLow()));
         rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Mid x1, mid x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getMid()));
         rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("Mid x1, high x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getMid()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getHigh()));
         rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, low x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getLow()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getLow()));
         rule.addConsequent(new Consequent(inputs.getMidConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, mid x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getMid()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getMid()));
         rule.addConsequent(new Consequent(inputs.getHighConseqent()));
         rules.addRule(rule);
 
         rule = new Rule("High x1, high x2");
-        rule.addAntecedent(new Antecedent(inputs.getX(), inputs.getHigh()));
-        rule.addAntecedent(new Antecedent(inputs.getY(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getX(), inputs.getHigh()));
+        rule.addAntecedent(new AntecedentOld(inputs.getY(), inputs.getHigh()));
         rule.addConsequent(new Consequent(inputs.getHighConseqent()));
         rules.addRule(rule);
 
