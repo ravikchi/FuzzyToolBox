@@ -110,7 +110,7 @@ public class FLC {
 
         for (int i = 0; i < flc.getCounts().length; i++) {
             for (int j = 0; j < flc.getCounts()[i].length; j++) {
-                System.out.print(flc.getCounts()[i][j]+" ");
+                System.out.print(flc.getCounts()[i][j]+"  ");
             }
             System.out.println();
         }
