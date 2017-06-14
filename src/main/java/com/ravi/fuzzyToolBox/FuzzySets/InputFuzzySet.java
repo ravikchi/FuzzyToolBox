@@ -17,14 +17,14 @@ public class InputFuzzySet implements FuzzySet {
         this.spread = spread;
         this.value = value;
         this.membershipFunction = membershipFunction;
-        this.increment = spread*2/10;
+        this.increment = spread*2/100;
     }
 
     public InputFuzzySet(double spread, double value) {
         this.spread = spread;
         this.value = value;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
-        this.increment = spread*2/10;
+        this.increment = spread*2/100;
     }
 
     public double getSpread() {

@@ -14,7 +14,7 @@ public class ProductTnorm implements FZOperation {
             value = memFunc.getMemGrade(x);
         }else{
             double maxGrade = 0.0;
-            for (double i = Math.min(memFunc.getLSupport(), input.getLSupport(x)); i < Math.max(memFunc.getRSupport(), input.getRSupport(x)) ; i++) {
+            for (double i = input.getLSupport(x); i <= input.getRSupport(x) ; i=i+input.getIncrement()) {
                 double grade = memFunc.getMemGrade(i) * input.getMembershipFunction(x).getMemGrade(i);
                 if(grade > maxGrade){
                     maxGrade = grade;

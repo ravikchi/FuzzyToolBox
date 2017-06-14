@@ -39,7 +39,7 @@ public class FuzzySetImpl implements FuzzySet {
 
     public FuzzySetImpl(double spread) {
         this.spread = spread;
-        this.increment = spread*2/10;
+        this.increment = spread*2/100;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
     }
 

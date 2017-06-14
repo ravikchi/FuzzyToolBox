@@ -335,8 +335,8 @@ public class FuzzyUI extends Application {
             }
         }
 
-        drawXInputLines(gc, startx, starty, inputs.get(0), flc.getInputIUpperMemFunc().get(1));
-        drawYInputLines(gc, startx, starty, inputs.get(1), flc.getInputJUpperMemFunc().get(1));
+        drawXInputLines(gc, startx, starty, inputs.get(1), flc.getInputIUpperMemFunc().get(1));
+        drawYInputLines(gc, startx, starty, inputs.get(0), flc.getInputJUpperMemFunc().get(1));
 
 
         gc.setStroke(Color.BLACK);
