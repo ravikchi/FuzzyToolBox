@@ -266,10 +266,10 @@ public class FuzzyUI extends Application {
         double scalex = sizex/(flc.getEndi()-flc.getIncrementi()-flc.getStarti());
 
 
-        double start = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scalex;
-        double top1 = (memFunc.getStart()+zeroValue)*scalex;
-        double top2 = (memFunc.getStart()+zeroValue)*scalex;
-        double end = (memFunc.getStart()+fuzzySet.getSpread()+zeroValue)*scalex;
+        double start = (memFunc.getStart()+zeroValue)*scalex;
+        double top1 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scalex;
+        double top2 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scalex;
+        double end = (memFunc.getStart()-fuzzySet.getSpread()*2+zeroValue)*scalex;
 
         gc.strokeLine(startx+start+canvasMargin, starty+canvasMargin, startx+top1+canvasMargin, starty+canvasMargin/2);
         gc.strokeLine(startx+top1+canvasMargin, starty+canvasMargin/2, startx+top2+canvasMargin, starty+canvasMargin/2);
@@ -283,10 +283,10 @@ public class FuzzyUI extends Application {
         double scaley = sizey/(flc.getEndj()-flc.getIncrementj()-flc.getStartj());
 
 
-        double start = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
-        double top1 = (memFunc.getStart()+zeroValue)*scaley;
-        double top2 = (memFunc.getStart()+zeroValue)*scaley;
-        double end = (memFunc.getStart()+fuzzySet.getSpread()+zeroValue)*scaley;
+        double start = (memFunc.getStart()+zeroValue)*scaley;
+        double top1 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
+        double top2 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
+        double end = (memFunc.getStart()-fuzzySet.getSpread()*2+zeroValue)*scaley;
 
         gc.strokeLine(startx+canvasMargin, starty+start+canvasMargin, startx+canvasMargin/2, starty+top1+canvasMargin);
         gc.strokeLine(startx+canvasMargin/2, starty+top1+canvasMargin, startx+canvasMargin/2, starty+top2+canvasMargin);
