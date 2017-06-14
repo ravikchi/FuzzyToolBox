@@ -243,11 +243,20 @@ public class FuzzyUI extends Application {
         if(low.getTop2() != mid.getStart()) {
             gc.strokeLine(low.getTop2() * getScaleX() + canvasMargin, canvasMargin, low.getTop2() * getScaleX() + canvasMargin, canvasHeight);
             gc.strokeLine(canvasMargin,low.getTop2()*getScaleY()+canvasMargin, canvasWidth, low.getTop2()*getScaleY()+canvasMargin);
+            if(!mid.isUpper()) {
+                gc.strokeLine(mid.getStart() * getScaleX() + canvasMargin, canvasMargin, mid.getStart() * getScaleX() + canvasMargin, canvasHeight);
+                gc.strokeLine(canvasMargin, mid.getStart() * getScaleY() + canvasMargin, canvasWidth, mid.getStart() * getScaleY() + canvasMargin);
+            }
+
         }
 
         if(mid.getTop1() != low.getEnd()){
             gc.strokeLine(mid.getTop1() * getScaleX() + canvasMargin, canvasMargin, mid.getTop1() * getScaleX() + canvasMargin, canvasHeight);
             gc.strokeLine(canvasMargin, mid.getTop1()*getScaleY()+canvasMargin, canvasWidth, mid.getTop1()*getScaleY()+canvasMargin);
+            if(!low.isUpper()) {
+                gc.strokeLine(low.getEnd() * getScaleX() + canvasMargin, canvasMargin, low.getEnd() * getScaleX() + canvasMargin, canvasHeight);
+                gc.strokeLine(canvasMargin, low.getEnd()*getScaleY()+canvasMargin, canvasWidth, low.getEnd()*getScaleY()+canvasMargin);
+            }
         }
     }
 
