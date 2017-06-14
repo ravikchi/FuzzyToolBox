@@ -75,6 +75,8 @@ public class NoveltyPartRules {
         int addi = 0;
         int addj = 0;
 
+        int count = 0;
+
         for (int i = 1; i <= 3; i++) {
             List<MemFunc> antcMemFuncs1 = new ArrayList<MemFunc>();
             antcMemFuncs1.add(input1MemFuncs.get(addi));
@@ -84,12 +86,13 @@ public class NoveltyPartRules {
             for (int j = 1; j <= 3; j++) {
 
                 List<MemFunc> antcMemFuncs2 = new ArrayList<MemFunc>();
-                antcMemFuncs2.add(input1MemFuncs.get(addj));
+                antcMemFuncs2.add(input2MemFuncs.get(addj));
                 addj++;
-                antcMemFuncs2.add(input1MemFuncs.get(addj));
+                antcMemFuncs2.add(input2MemFuncs.get(addj));
 
 
-                Rule rule = new Rule(input1MemFuncs.get(addi).getName() + input2MemFuncs.get(addj).getName());
+                Rule rule = new Rule(input1MemFuncs.get(addi).getName() + input2MemFuncs.get(addj).getName(), count);
+                count++;
                 rule.addAntecedent(new AntecedentImpl(antcMemFuncs1));
                 rule.addAntecedent(new AntecedentImpl(antcMemFuncs2));
 

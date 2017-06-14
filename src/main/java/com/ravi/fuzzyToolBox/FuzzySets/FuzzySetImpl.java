@@ -1,6 +1,7 @@
 package com.ravi.fuzzyToolBox.FuzzySets;
 
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
+import com.ravi.fuzzyToolBox.MemFunctions.PWLMF;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 
 /**
@@ -10,6 +11,8 @@ public class FuzzySetImpl implements FuzzySet {
     private double spread;
     private double value;
     private MemFunc membershipFunction;
+    private double increment;
+
 
     public MemFunc getMembershipFunction(double value) {
         return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value), false, false);
@@ -17,7 +20,17 @@ public class FuzzySetImpl implements FuzzySet {
 
     @Override
     public MemFunc getMembershipFunction() {
-        return null;
+        return membershipFunction;
+    }
+
+    @Override
+    public double getIncrement() {
+        return increment;
+    }
+
+    @Override
+    public void setIncrement(double increment) {
+        this.increment = increment;
     }
 
     public void setMembershipFunction(MemFunc membershipFunction) {
@@ -26,6 +39,8 @@ public class FuzzySetImpl implements FuzzySet {
 
     public FuzzySetImpl(double spread) {
         this.spread = spread;
+        this.increment = spread*2/10;
+        this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
     }
 
     public double getLSupport(double value) {
@@ -42,6 +57,11 @@ public class FuzzySetImpl implements FuzzySet {
 
     public double getRSupport() {
         return value + spread;
+    }
+
+    @Override
+    public double getSpread() {
+        return spread;
     }
 
     public void setValue(double value) {

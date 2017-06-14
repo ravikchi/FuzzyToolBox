@@ -1,6 +1,7 @@
 package com.ravi.fuzzyToolBox.Rules;
 
 import com.ravi.fuzzyToolBox.FZOperation;
+import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.TypeReduction.CentriodIterMethod;
 
 import java.util.*;
@@ -12,6 +13,7 @@ public class Rule {
     private List<Antecedent> antecedents = new ArrayList<Antecedent>();
     private List<Consequent> consequents = new ArrayList<Consequent>();
     private String name;
+    private int order;
 
     public static final String regular = "Regular";
     public static final String upper = "Upper";
@@ -46,6 +48,19 @@ public class Rule {
         this.name = name;
     }
 
+    public Rule(String name, int order) {
+        this.name = name;
+        this.order = order;
+    }
+
+    public int getOrder() {
+        return order;
+    }
+
+    public void setOrder(int order) {
+        this.order = order;
+    }
+
     public String getName() {
         return name;
     }
@@ -73,6 +88,40 @@ public class Rule {
         for(int i=0; i<antecedents.size(); i++){
             Antecedent a = antecedents.get(i);
             double ipt = inputs.get(i);
+
+            Map<String, Double> anteceentFL = a.getFiringLevel(ipt, fzOperation);
+
+            Iterator<String> it = anteceentFL.keySet().iterator();
+            while(it.hasNext()){
+                String key = it.next();
+                if(firingLevel.get(key) == null){
+                    firingLevel.put(key, anteceentFL.get(key));
+                }else{
+                   /* if(anteceentFL.get(key) < firingLevel.get(key)){
+                        firingLevel.put(key, anteceentFL.get(key));
+                    }*/
+                    firingLevel.put(key, fzOperation.operation(firingLevel.get(key), anteceentFL.get(key)));
+                }
+            }
+        }
+
+        if(firingLevel.get(regular) == null){
+            type2 = true;
+            this.upperFiringLevel = firingLevel.get(upper);
+            this.lowerFiringLevel = firingLevel.get(lower);
+        }else{
+            this.firingLevel = firingLevel.get(regular);
+        }
+
+
+
+    }
+
+    public void calculateFiringLevels(FZOperation fzOperation,List<FuzzySet> inputs){
+        Map<String, Double> firingLevel = new HashMap<String, Double>();
+        for(int i=0; i<antecedents.size(); i++){
+            Antecedent a = antecedents.get(i);
+            FuzzySet ipt = inputs.get(i);
 
             Map<String, Double> anteceentFL = a.getFiringLevel(ipt, fzOperation);
 

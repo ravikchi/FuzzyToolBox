@@ -28,7 +28,7 @@ public class TypeReducer {
         double addValue = 0.0000000001;
         int count = 0;
         for(Rule rule : ruleList){
-            System.out.println((rule.getClAvg()+(addValue*count)) + " "+ (rule.getCrAvg()+(addValue*count)) + ", is "+rule.getLowerFiringLevel() + ","+rule.getUpperFiringLevel());
+            //System.out.println((rule.getClAvg()+(addValue*count)) + " "+ (rule.getCrAvg()+(addValue*count)) + ", is "+rule.getLowerFiringLevel() + ","+rule.getUpperFiringLevel());
             if(rule.getLowerFiringLevel() > 0 || rule.getUpperFiringLevel() > 0) {
                 ruleMapx.put(rule.getClAvg() + addValue * count, rule);
                 ruleMapy.put(rule.getCrAvg() + addValue * count, rule);

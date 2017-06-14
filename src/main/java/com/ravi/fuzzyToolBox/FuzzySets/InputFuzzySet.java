@@ -11,17 +11,20 @@ public class InputFuzzySet implements FuzzySet {
     private double spread;
     private double value;
     private MemFunc membershipFunction;
+    private double increment;
 
     public InputFuzzySet(double spread, double value, MemFunc membershipFunction) {
         this.spread = spread;
         this.value = value;
         this.membershipFunction = membershipFunction;
+        this.increment = spread*2/10;
     }
 
     public InputFuzzySet(double spread, double value) {
         this.spread = spread;
         this.value = value;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
+        this.increment = spread*2/10;
     }
 
     public double getSpread() {
@@ -60,6 +63,16 @@ public class InputFuzzySet implements FuzzySet {
     @Override
     public MemFunc getMembershipFunction(double value) {
         return membershipFunction;
+    }
+
+    @Override
+    public double getIncrement() {
+        return increment;
+    }
+
+    @Override
+    public void setIncrement(double increment) {
+        this.increment = increment;
     }
 
     @Override
