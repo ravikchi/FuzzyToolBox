@@ -72,7 +72,9 @@ public class FuzzyUI extends Application {
         double spread1 = 0.0;
         double spread2 = 0.0;
 
-        getData(spread1, spread2);
+        String type = "1";
+
+        getData(spread1, spread2, type);
 
         prepareCanvas(0, 0);
 
@@ -85,6 +87,7 @@ public class FuzzyUI extends Application {
                     Canvas c = (Canvas) mouseEvent.getSource();
                     TextField tf = (TextField) c.getParent().getParent().getParent().lookup("#spread1T");
                     TextField tf1 = (TextField) c.getParent().getParent().getParent().lookup("#spread2T");
+                    TextField flcTypeVal = (TextField) c.getParent().getParent().getParent().lookup("#flcTypeVal");
                     double tfint = 0;
                     double tf1int = 0;
 
@@ -92,11 +95,12 @@ public class FuzzyUI extends Application {
                         tfint = Double.parseDouble(tf.getText());
                         tf1int = Double.parseDouble(tf1.getText());
 
-                        getData(tfint, tf1int);
-                        c.getGraphicsContext2D().clearRect(0, 0, c.getWidth(), c.getHeight());
+                        getData(tfint, tf1int, flcTypeVal.getText());
+                        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                         prepareCanvas(0, 0);
 
                         lowerNoveltyCanvas.getGraphicsContext2D().clearRect(0,0, lowerNoveltyCanvas.getWidth(), lowerNoveltyCanvas.getWidth());
+                        upperNoveltyCanvas.getGraphicsContext2D().clearRect(0,0, upperNoveltyCanvas.getWidth(), upperNoveltyCanvas.getWidth());
                         drawNoveltyPartitions(0, 0, flc.getLowerNoveltyCounts(), lowerNoveltyCanvas);
                         drawNoveltyPartitions(0, 0, flc.getUpperNoveltyCounts(), upperNoveltyCanvas);
 
@@ -132,7 +136,7 @@ public class FuzzyUI extends Application {
         root.getChildren().add(pane);
 
         //root.getChildren().add(canvas);
-        root.getChildren().add(textBoxes(spread1, spread2));
+        root.getChildren().add(textBoxes(spread1, spread2, type));
 /*
         root.getChildren().add(lowerNoveltyCanvas);
         root.getChildren().add(upperNoveltyCanvas);*/
@@ -144,7 +148,7 @@ public class FuzzyUI extends Application {
         primaryStage.show();
     }
 
-    private Group textBoxes(double spr1, double spr2){
+    private Group textBoxes(double spr1, double spr2, String type){
         Group grp = new Group();
         grp.setTranslateX(canvasWidth+canvasMargin);
 
@@ -175,10 +179,21 @@ public class FuzzyUI extends Application {
         spread2.setText(spr2+"");
         row3.getChildren().addAll(spread2, spread2L);
         row3.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
+
+        Group row4 = new Group();
+        Label flcType = new Label("FLC Type");
+        TextField flcTypeVal = new TextField();
+        flcTypeVal.setTranslateX(moveRight);
+        flcTypeVal.setId("flcTypeVal");
+        flcTypeVal.setText(type);
+        row4.getChildren().addAll(flcType, flcTypeVal);
+        row4.setTranslateY(moveDown);
 
         grp.getChildren().add(row1);
         grp.getChildren().add(row2);
         grp.getChildren().add(row3);
+        grp.getChildren().add(row4);
 
         return grp;
     }
@@ -693,7 +708,7 @@ public class FuzzyUI extends Application {
         this.zeroValue = zeroValue;
     }
 
-    private void getData(double spread1, double spread2){
+    private void getData(double spread1, double spread2, String type){
         NoveltyPartRules data = new NoveltyPartRules();
         Rules rules = data.getRules();
 
@@ -702,97 +717,19 @@ public class FuzzyUI extends Application {
         inputs.add(new FuzzySetImpl(spread2));
 
         RulesInputs rulesInputs = new RulesInputs(inputs.get(0), inputs.get(1), 11);
-        List<MemFunc> low = new ArrayList<MemFunc>();
-        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 9, 19, true, false);
-        MemFunc lowLower = new TrapezoidalMemFunc("lowUpper",0, 0, 11, 21, true, true);
-        low.add(lowMem);
-        low.add(lowLower);
-
-        List<MemFunc> lowC = new ArrayList<MemFunc>();
-        List<MemFunc> midC = new ArrayList<MemFunc>();
-        List<MemFunc> highC = new ArrayList<MemFunc>();
-
-        /*MemFunc lowLowerConsequent = new TrapezoidalMemFunc("lowConsequent", 0, 0, 9, 19, true, false);
-        MemFunc lowUpperConsequent = new TrapezoidalMemFunc("lowUpperConsequent",0, 0, 11, 21, true, true);
-        lowC.add(lowLowerConsequent);
-        lowC.add(lowUpperConsequent);*/
-
-        MemFunc lowLowerConsequent = new TrapezoidalMemFunc("lowConsequent", 0, 40, 40, 19, false, false);
-        lowC.add(lowLowerConsequent);
-
-        List<MemFunc> mid = new ArrayList<MemFunc>();
-        MemFunc midMem = new TrapezoidalMemFunc("midUpper",10, 20, 31, 41, true, true);
-        MemFunc midLower = new TrapezoidalMemFunc("midLower",12, 22, 29, 39, true, false);
-        mid.add(midMem);
-        mid.add(midLower);
-
-        /*MemFunc midLowerConsequent = new TrapezoidalMemFunc("midConsequent", 12, 22, 29, 39, true, false);
-        MemFunc midUpperConsequent = new TrapezoidalMemFunc("midUpperConsequent",10, 20, 31, 41, true, true);
-        midC.add(midLowerConsequent);
-        midC.add(midUpperConsequent);*/
-
-        MemFunc midUpperConsequent = new TrapezoidalMemFunc("midUpperConsequent",10, 70, 70, 41, false, true);
-        midC.add(midUpperConsequent);
-
-        List<MemFunc> high = new ArrayList<MemFunc>();
-        MemFunc highMem = new TrapezoidalMemFunc("highUpper",30, 40, 50, 50, true, true);
-        MemFunc highLower = new TrapezoidalMemFunc("highLower",32, 42, 50, 50, true, false);
-        high.add(highMem);
-        high.add(highLower);
-
-        /*MemFunc highMemConsequent = new TrapezoidalMemFunc("highUpperConsequent",30, 40, 50, 50, true, true);
-        MemFunc highLowerConsequent = new TrapezoidalMemFunc("highLowerConsequent",32, 42, 50, 50, true, false);
-        highC.add(highMemConsequent);
-        highC.add(highLowerConsequent);*/
-
-        MemFunc highLowerConsequent = new TrapezoidalMemFunc("highLowerConsequent",32, 100, 100, 50, false, false);
-        highC.add(highLowerConsequent);
-
-        rulesInputs.setLow(low);
-        rulesInputs.setMid(mid);
-        rulesInputs.setHigh(high);
-
-        rulesInputs.setLowConseqent(lowC);
-        rulesInputs.setMidConseqent(midC);
-        rulesInputs.setHighConseqent(highC);
+        rulesInputs.defaultMemFunctions();
+        if(type.equalsIgnoreCase("1")) {
+            rules = FuzzyPartitions.getRules(rulesInputs);
+        }
 
 
         FZOperation fzOperation = new ProductTnorm();
 
-        this.flc = new FLC(FuzzyPartitions.getRules(rulesInputs), fzOperation);
+        this.flc = new FLC(rules, fzOperation);
         flc.initiate(49, 49);
         flc.runRules(inputs);
-
-        /*this.flc = new FLC(rules, fzOperation);
-        flc.initiate(49, 49);
-        flc.runRules(inputs);
-        setZeroValue(1);*/
-
-        System.out.println("########################################################################################################################################################################################");
-
-        for (int i = 0; i < flc.getCounts().length-1; i++) {
-            for (int j = 0; j < flc.getCounts()[i].length-1; j++) {
-                System.out.print(flc.getCounts()[i][j]+"  ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("########################################################################################################################################################################################");
-
-        for (int i = 0; i < flc.getLowerNoveltyCounts().length-1; i++) {
-            for (int j = 0; j < flc.getLowerNoveltyCounts()[i].length-1; j++) {
-                System.out.print(flc.getLowerNoveltyCounts()[i][j]+"  ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("########################################################################################################################################################################################");
-
-        for (int i = 0; i < flc.getUpperNoveltyCounts().length-1; i++) {
-            for (int j = 0; j < flc.getUpperNoveltyCounts()[i].length-1; j++) {
-                System.out.print(flc.getUpperNoveltyCounts()[i][j]+"  ");
-            }
-            System.out.println();
+        if(!type.equalsIgnoreCase("1")) {
+            setZeroValue(1);
         }
     }
 }

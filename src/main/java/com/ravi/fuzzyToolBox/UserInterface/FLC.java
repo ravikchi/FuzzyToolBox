@@ -283,7 +283,7 @@ public class FLC {
         Collections.sort(triggeredRules, new RulesComparator());
 
         double minYl = Double.MAX_VALUE;
-        double minYr = Double.MAX_VALUE;
+        double minYr = Double.MIN_VALUE;
         int l = 0;
         int r = 0;
         for (int k = 0; k <= triggeredRules.size(); k++) {
@@ -328,7 +328,7 @@ public class FLC {
                 l = k;
             }
 
-            if(minYr >= yr){
+            if(minYr <= yr){
                 minYr = yr;
                 r = k;
             }

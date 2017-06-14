@@ -83,13 +83,11 @@ public class PWLMF implements MemFunc{
 
     @Override
     public double getMemGrade(double x) {
-        if(start > x || end < x ){
-            return y1;
-        }
-
         double value = 0.0;
         if(top1<= x && x <= top2){
             value = y2;
+        }else if(start > x || end < x ){
+            return y1;
         }else if(x < top1) {
             value = (y2-y1) * (x - start) / (top1 - start) + y1;
         }else if(x > top2){
