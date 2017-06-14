@@ -7,6 +7,7 @@ import com.ravi.fuzzyToolBox.FZOperation;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySet;
 import com.ravi.fuzzyToolBox.FuzzySets.FuzzySetImpl;
 import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
+import com.ravi.fuzzyToolBox.MemFunctions.PWLMF;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 import com.ravi.fuzzyToolBox.ProductTnorm;
 import com.ravi.fuzzyToolBox.Rules.Rules;
@@ -393,6 +394,10 @@ public class FuzzyUI extends Application {
         }
 
         gc.setStroke(Color.BLACK);
+        drawXInputLines(gc, startx, starty, inputs.get(1), flc.getInputIUpperMemFunc().get(2));
+        drawYInputLines(gc, startx, starty, inputs.get(0), flc.getInputJUpperMemFunc().get(2));
+
+        gc.setStroke(Color.BLACK);
     }
 
     private void drawMeasurementLines(int startx, int starty,GraphicsContext gc){
@@ -401,15 +406,26 @@ public class FuzzyUI extends Application {
         double scalex = sizex/(flc.getEndi()-flc.getIncrementi()-flc.getStarti());
 
         for (double i=flc.getStarti(); i<flc.getEndi(); i=i+flc.getIncrementi()*5) {
-            String val = String.format("%.0f",i);
-            gc.strokeLine((i*getScaleX())+startx+canvasMargin, canvasMargin, (i*getScaleX())+canvasMargin, canvasMargin-10);
-            gc.fillText(val,(i*getScaleX())+canvasMargin-5, canvasMargin-20);
+            String val = String.format("%.2f",i);
+            if(i>1){
+                val = String.format("%.0f",i);
+            }
+
+            gc.strokeLine(((i+zeroValue)*scalex)+startx+canvasMargin, canvasMargin, ((i+zeroValue)*scalex)+canvasMargin, canvasMargin-10);
+            gc.fillText(val,((i+zeroValue)*scalex)+canvasMargin-5, canvasMargin-20);
         }
 
+        double sizey = canvasHeight - canvasMargin;
+
+        double scaley = sizey/(flc.getEndj()-flc.getIncrementj()-flc.getStartj());
+
         for (double i=flc.getStartj(); i<flc.getEndj(); i=i+flc.getIncrementj()*5) {
-            String val = String.format("%.0f",i);
-            gc.strokeLine(canvasMargin-10, canvasMargin+i*getScaleY(), canvasMargin, canvasMargin+i*getScaleY());
-            gc.fillText(val,canvasMargin-25,canvasMargin+i*getScaleY()+5);
+            String val = String.format("%.2f",i);
+            if(i>1){
+                val = String.format("%.0f",i);
+            }
+            gc.strokeLine(canvasMargin-10, canvasMargin+(i+zeroValue)*scaley, canvasMargin, canvasMargin+(i+zeroValue)*scaley);
+            gc.fillText(val,canvasMargin-25,canvasMargin+(i+zeroValue)*scaley+5);
         }
 
     }

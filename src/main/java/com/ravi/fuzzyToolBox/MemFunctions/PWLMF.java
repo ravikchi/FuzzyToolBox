@@ -55,6 +55,14 @@ public class PWLMF implements MemFunc{
         this.upper = false;
     }
 
+    public double getY1() {
+        return y1;
+    }
+
+    public double getY2() {
+        return y2;
+    }
+
     @Override
     public boolean isType2() {
         return type2;
