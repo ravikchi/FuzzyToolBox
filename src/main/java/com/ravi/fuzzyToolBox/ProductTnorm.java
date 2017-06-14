@@ -35,12 +35,10 @@ public class ProductTnorm implements FZOperation {
 
     @Override
     public double run(FuzzySet input, MemFunc memFunc) {
-        double value = 0.0;
+        double value = memFunc.getMemGrade(input.getValue());
 
-        if(input.getLSupport() == input.getRSupport()){
-            value = memFunc.getMemGrade(input.getValue());
-        }else {
-            for (double i = Math.min(memFunc.getLSupport(), input.getLSupport()); i < Math.max(memFunc.getRSupport(), input.getRSupport()); i++) {
+        if(input.getLSupport() != input.getRSupport()){
+            for (double i = input.getLSupport(); i <= input.getRSupport() ; i=i+input.getIncrement()) {
                 double grade = memFunc.getMemGrade(i) * input.getMembershipFunction().getMemGrade(i);
                 if (grade > value) {
                     value = grade;

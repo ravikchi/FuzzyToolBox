@@ -95,8 +95,8 @@ public class FuzzyUI extends Application {
                         tfint = Double.parseDouble(tf.getText());
                         tf1int = Double.parseDouble(tf1.getText());
 
-                        getData(tfint, tf1int, flcTypeVal.getText());
                         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+                        getData(tfint, tf1int, flcTypeVal.getText());
                         prepareCanvas(0, 0);
 
                         lowerNoveltyCanvas.getGraphicsContext2D().clearRect(0,0, lowerNoveltyCanvas.getWidth(), lowerNoveltyCanvas.getWidth());
@@ -730,6 +730,33 @@ public class FuzzyUI extends Application {
         flc.runRules(inputs);
         if(!type.equalsIgnoreCase("1")) {
             setZeroValue(1);
+        }
+
+        System.out.println("########################################################################################################################################################################################");
+
+        for (int i = 0; i < flc.getCounts().length-1; i++) {
+            for (int j = 0; j < flc.getCounts()[i].length-1; j++) {
+                System.out.print(flc.getCounts()[i][j]+"  ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("########################################################################################################################################################################################");
+
+        for (int i = 0; i < flc.getLowerNoveltyCounts().length-1; i++) {
+            for (int j = 0; j < flc.getLowerNoveltyCounts()[i].length-1; j++) {
+                System.out.print(flc.getLowerNoveltyCounts()[i][j]+"  ");
+            }
+            System.out.println();
+        }
+
+        System.out.println("########################################################################################################################################################################################");
+
+        for (int i = 0; i < flc.getUpperNoveltyCounts().length-1; i++) {
+            for (int j = 0; j < flc.getUpperNoveltyCounts()[i].length-1; j++) {
+                System.out.print(flc.getUpperNoveltyCounts()[i][j]+"  ");
+            }
+            System.out.println();
         }
     }
 }
