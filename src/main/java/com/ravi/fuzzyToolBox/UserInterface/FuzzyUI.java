@@ -720,6 +720,7 @@ public class FuzzyUI extends Application {
         rulesInputs.defaultMemFunctions();
         if(type.equalsIgnoreCase("1")) {
             rules = FuzzyPartitions.getRules(rulesInputs);
+            setZeroValue(0);
         }
 
 
