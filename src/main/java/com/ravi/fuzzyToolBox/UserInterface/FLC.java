@@ -282,8 +282,8 @@ public class FLC {
     private void calculateNoveltyPartitions(List<Rule> triggeredRules, int counti, int countj){
         Collections.sort(triggeredRules, new RulesComparator());
 
-        double minYl = Double.MAX_VALUE;
-        double minYr = Double.MIN_VALUE;
+        double minYl = 5000000;
+        double minYr = -5000000;
         int l = 0;
         int r = 0;
         for (int k = 0; k <= triggeredRules.size(); k++) {

@@ -463,7 +463,7 @@ public class FuzzyUI extends Application {
 
     private void setGcFill(int value, GraphicsContext gc){
         if(value == 0) {
-            gc.setFill(Color.WHITE);
+            gc.setFill(Color.GREY);
         }else if(value == 1) {
             gc.setFill(Color.WHITE);
         }else if(value == 2){
@@ -472,6 +472,8 @@ public class FuzzyUI extends Application {
             gc.setFill(Color.AQUA);
         }else if(value == 4){
             gc.setFill(Color.RED);
+        }else if(value == 5) {
+            gc.setFill(Color.YELLOW);
         }else if(value == 6){
             gc.setFill(Color.BEIGE);
         }else if(value == 9){
