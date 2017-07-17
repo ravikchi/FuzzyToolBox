@@ -39,6 +39,7 @@ public class FuzzyUI extends Application {
     int canvasWidth = 800;
     int canvasHeight = 700;
     int canvasMargin = 100;
+    String type = "0";
 
     List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
@@ -73,8 +74,6 @@ public class FuzzyUI extends Application {
         double spread1 = 0.0;
         double spread2 = 0.0;
 
-        String type = "1";
-
         getData(spread1, spread2, type);
 
         prepareCanvas(0, 0);
@@ -98,6 +97,7 @@ public class FuzzyUI extends Application {
 
                         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
                         getData(tfint, tf1int, flcTypeVal.getText());
+                        type = flcTypeVal.getText();
                         prepareCanvas(0, 0);
 
                         lowerNoveltyCanvas.getGraphicsContext2D().clearRect(0,0, lowerNoveltyCanvas.getWidth(), lowerNoveltyCanvas.getWidth());
@@ -335,27 +335,31 @@ public class FuzzyUI extends Application {
     }
 
     private void drawMemFuncLines(GraphicsContext gc, int startx, int starty){
-        for (int i = 0; i < flc.getInputILowerMemFunc().size(); i++) {
+        for (int i = 0; i < flc.getInputIUpperMemFunc().size(); i++) {
             setStokeColor(i, gc);
-            drawXLines(gc, startx, starty, flc.getInputILowerMemFunc().get(i));
+            if(flc.getInputILowerMemFunc().size() > 0)
+                drawXLines(gc, startx, starty, flc.getInputILowerMemFunc().get(i));
 
             drawXLines(gc, startx, starty, flc.getInputIUpperMemFunc().get(i));
 
             if(i>0){
-                drawSecondaryPartitions(flc.getInputILowerMemFunc().get(i-1), flc.getInputILowerMemFunc().get(i), gc);
+                if(flc.getInputILowerMemFunc().size() > 0)
+                    drawSecondaryPartitions(flc.getInputILowerMemFunc().get(i-1), flc.getInputILowerMemFunc().get(i), gc);
                 drawSecondaryPartitions(flc.getInputIUpperMemFunc().get(i-1), flc.getInputIUpperMemFunc().get(i), gc);
             }
         }
 
 
-        for (int i = 0; i < flc.getInputJLowerMemFunc().size(); i++) {
+        for (int i = 0; i < flc.getInputJUpperMemFunc().size(); i++) {
             setStokeColor(i, gc);
-            drawYLines(gc, startx, starty, flc.getInputJLowerMemFunc().get(i));
+            if(flc.getInputJLowerMemFunc().size() > 0)
+                drawYLines(gc, startx, starty, flc.getInputJLowerMemFunc().get(i));
 
             drawYLines(gc, startx, starty, flc.getInputJUpperMemFunc().get(i));
 
             if(i>0){
-                drawSecondaryPartitions(flc.getInputJLowerMemFunc().get(i-1), flc.getInputJLowerMemFunc().get(i), gc);
+                if(flc.getInputJLowerMemFunc().size() > 0)
+                    drawSecondaryPartitions(flc.getInputJLowerMemFunc().get(i-1), flc.getInputJLowerMemFunc().get(i), gc);
                 drawSecondaryPartitions(flc.getInputJUpperMemFunc().get(i-1), flc.getInputJUpperMemFunc().get(i), gc);
             }
         }
@@ -368,27 +372,31 @@ public class FuzzyUI extends Application {
     }
 
     private void drawMemFuncLines(GraphicsContext gc, int startx, int starty, boolean secPartitions){
-        for (int i = 0; i < flc.getInputILowerMemFunc().size(); i++) {
+        for (int i = 0; i < flc.getInputIUpperMemFunc().size(); i++) {
             setStokeColor(i, gc);
-            drawXLines(gc, startx, starty, flc.getInputILowerMemFunc().get(i));
+            if(flc.getInputILowerMemFunc().size() > 0)
+                drawXLines(gc, startx, starty, flc.getInputILowerMemFunc().get(i));
 
             drawXLines(gc, startx, starty, flc.getInputIUpperMemFunc().get(i));
 
             if(i>0 && secPartitions){
-                drawSecondaryPartitions(flc.getInputILowerMemFunc().get(i-1), flc.getInputILowerMemFunc().get(i), gc);
+                if(flc.getInputILowerMemFunc().size() > 0)
+                    drawSecondaryPartitions(flc.getInputILowerMemFunc().get(i-1), flc.getInputILowerMemFunc().get(i), gc);
                 drawSecondaryPartitions(flc.getInputIUpperMemFunc().get(i-1), flc.getInputIUpperMemFunc().get(i), gc);
             }
         }
 
 
-        for (int i = 0; i < flc.getInputJLowerMemFunc().size(); i++) {
+        for (int i = 0; i < flc.getInputJUpperMemFunc().size(); i++) {
             setStokeColor(i, gc);
-            drawYLines(gc, startx, starty, flc.getInputJLowerMemFunc().get(i));
+            if(flc.getInputJLowerMemFunc().size() > 0)
+                drawYLines(gc, startx, starty, flc.getInputJLowerMemFunc().get(i));
 
             drawYLines(gc, startx, starty, flc.getInputJUpperMemFunc().get(i));
 
             if(i>0 && secPartitions){
-                drawSecondaryPartitions(flc.getInputJLowerMemFunc().get(i-1), flc.getInputJLowerMemFunc().get(i), gc);
+                if(flc.getInputJLowerMemFunc().size() > 0)
+                    drawSecondaryPartitions(flc.getInputJLowerMemFunc().get(i-1), flc.getInputJLowerMemFunc().get(i), gc);
                 drawSecondaryPartitions(flc.getInputJUpperMemFunc().get(i-1), flc.getInputJUpperMemFunc().get(i), gc);
             }
         }
@@ -744,8 +752,13 @@ public class FuzzyUI extends Application {
         inputs.add(new FuzzySetImpl(spread2));
 
         RulesInputs rulesInputs = new RulesInputs(inputs.get(0), inputs.get(1), 11);
-        rulesInputs.defaultMemFunctions();
+
         if(type.equalsIgnoreCase("1")) {
+            rulesInputs.defaultMemFunctions();
+            rules = FuzzyPartitions.getRules(rulesInputs);
+            setZeroValue(0);
+        }else if(type.equalsIgnoreCase("0")){
+            rulesInputs.type1MemFunctions();
             rules = FuzzyPartitions.getRules(rulesInputs);
             setZeroValue(0);
         }
@@ -756,7 +769,7 @@ public class FuzzyUI extends Application {
         this.flc = new FLC(rules, fzOperation);
         flc.initiate(49, 49);
         flc.runRules(inputs);
-        if(!type.equalsIgnoreCase("1")) {
+        if(type.equalsIgnoreCase("2")) {
             setZeroValue(1);
         }
 

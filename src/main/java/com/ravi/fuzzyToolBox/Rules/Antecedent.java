@@ -13,6 +13,8 @@ public interface Antecedent {
 
     public MemFunc getUpperMemFunction();
     public MemFunc getLowerMemFunction();
+    public MemFunc getMemFuncion();
+    public boolean isType2();
     public Map<String, Double> getFiringLevel(double x, FZOperation fuzzyOperation);
     public Map<String, Double> getFiringLevel(FuzzySet x, FZOperation fuzzyOperation);
 }

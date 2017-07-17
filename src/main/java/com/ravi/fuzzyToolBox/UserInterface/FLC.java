@@ -175,26 +175,42 @@ public class FLC {
             Antecedent ai = rule.getAntecedents().get(0);
             Antecedent aj = rule.getAntecedents().get(1);
 
-            starti = Math.min(starti, Math.min(ai.getLowerMemFunction().getLSupport(), ai.getUpperMemFunction().getLSupport()));
-            startj = Math.min(startj, Math.min(aj.getLowerMemFunction().getLSupport(), aj.getUpperMemFunction().getLSupport()));
+            if(ai.isType2() && aj.isType2()) {
 
-            endi = Math.max(endi, Math.min(ai.getLowerMemFunction().getRSupport(), ai.getUpperMemFunction().getRSupport()));
-            endj = Math.max(endj, Math.min(aj.getLowerMemFunction().getRSupport(), aj.getUpperMemFunction().getRSupport()));
+                starti = Math.min(starti, Math.min(ai.getLowerMemFunction().getLSupport(), ai.getUpperMemFunction().getLSupport()));
+                startj = Math.min(startj, Math.min(aj.getLowerMemFunction().getLSupport(), aj.getUpperMemFunction().getLSupport()));
 
-            if(!inputILowerMemFunc.contains(ai.getLowerMemFunction())){
-                inputILowerMemFunc.add(ai.getLowerMemFunction());
-            }
+                endi = Math.max(endi, Math.min(ai.getLowerMemFunction().getRSupport(), ai.getUpperMemFunction().getRSupport()));
+                endj = Math.max(endj, Math.min(aj.getLowerMemFunction().getRSupport(), aj.getUpperMemFunction().getRSupport()));
 
-            if(!inputIUpperMemFunc.contains(ai.getUpperMemFunction())){
-                inputIUpperMemFunc.add(ai.getUpperMemFunction());
-            }
+                if (!inputILowerMemFunc.contains(ai.getLowerMemFunction())) {
+                    inputILowerMemFunc.add(ai.getLowerMemFunction());
+                }
 
-            if(!inputJLowerMemFunc.contains(aj.getLowerMemFunction())){
-                inputJLowerMemFunc.add(aj.getLowerMemFunction());
-            }
+                if (!inputIUpperMemFunc.contains(ai.getUpperMemFunction())) {
+                    inputIUpperMemFunc.add(ai.getUpperMemFunction());
+                }
 
-            if(!inputJUpperMemFunc.contains(aj.getUpperMemFunction())){
-                inputJUpperMemFunc.add(aj.getUpperMemFunction());
+                if (!inputJLowerMemFunc.contains(aj.getLowerMemFunction())) {
+                    inputJLowerMemFunc.add(aj.getLowerMemFunction());
+                }
+
+                if (!inputJUpperMemFunc.contains(aj.getUpperMemFunction())) {
+                    inputJUpperMemFunc.add(aj.getUpperMemFunction());
+                }
+            }else{
+                starti = Math.min(starti, Math.min(ai.getMemFuncion().getLSupport(), ai.getMemFuncion().getLSupport()));
+                startj = Math.min(startj, Math.min(aj.getMemFuncion().getLSupport(), aj.getMemFuncion().getLSupport()));
+
+                endi = Math.max(endi, Math.min(ai.getMemFuncion().getRSupport(), ai.getMemFuncion().getRSupport()));
+                endj = Math.max(endj, Math.min(aj.getMemFuncion().getRSupport(), aj.getMemFuncion().getRSupport()));
+
+                if (!inputIUpperMemFunc.contains(ai.getMemFuncion())) {
+                    inputIUpperMemFunc.add(ai.getMemFuncion());
+                }
+                if (!inputJUpperMemFunc.contains(aj.getMemFuncion())) {
+                    inputJUpperMemFunc.add(aj.getMemFuncion());
+                }
             }
         }
 
@@ -257,7 +273,7 @@ public class FLC {
 
                     rule.calculateFiringLevels(fzOperation, inputs);
 
-                    if(rule.getUpperFiringLevel() > 0 || rule.getLowerFiringLevel() > 0){
+                    if(rule.getUpperFiringLevel() > 0 || rule.getLowerFiringLevel() > 0 || rule.getFiringLevel() > 0){
                         triggeredRules.add(rule);
                     }
                 }

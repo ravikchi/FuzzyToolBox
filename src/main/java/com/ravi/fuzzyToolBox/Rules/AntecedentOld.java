@@ -48,6 +48,22 @@ public class AntecedentOld implements Antecedent{
         return null;
     }
 
+    @Override
+    public MemFunc getMemFuncion() {
+        return memFuncs.get(0);
+    }
+
+    @Override
+    public boolean isType2() {
+        for(MemFunc memFunc : memFuncs){
+            if(memFunc.isType2()){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     public Map<String, Double> getFiringLevel(double x, FZOperation fuzzyOperation){
         Map<String, Double> firingLevels = new HashMap<String, Double>();
         for(MemFunc memFunc : memFuncs){
