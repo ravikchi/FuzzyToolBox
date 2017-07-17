@@ -91,7 +91,7 @@ public class RulesInputs {
 
     public void type1MemFunctions(){
         List<MemFunc> low = new ArrayList<MemFunc>();
-        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 10, 20, false, false);
+        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 10, 20, false, true);
         //MemFunc lowLower = new TrapezoidalMemFunc("lowUpper",0, 0, 11, 21, true, true);
         low.add(lowMem);
         //low.add(lowLower);
@@ -105,11 +105,11 @@ public class RulesInputs {
         lowC.add(lowLowerConsequent);
         lowC.add(lowUpperConsequent);*/
 
-        MemFunc lowLowerConsequent = new TrapezoidalMemFunc("lowConsequent", 0, 40, 40, 19, false, false);
+        MemFunc lowLowerConsequent = new TrapezoidalMemFunc("lowConsequent", 0, 40, 40, 19, false, true);
         lowC.add(lowLowerConsequent);
 
         List<MemFunc> mid = new ArrayList<MemFunc>();
-        MemFunc midMem = new TrapezoidalMemFunc("midUpper",11, 21, 30, 40, false, false);
+        MemFunc midMem = new TrapezoidalMemFunc("midUpper",11, 21, 30, 40, false, true);
         //MemFunc midLower = new TrapezoidalMemFunc("midLower",12, 22, 29, 39, true, false);
         mid.add(midMem);
         //mid.add(midLower);
@@ -123,7 +123,7 @@ public class RulesInputs {
         midC.add(midUpperConsequent);
 
         List<MemFunc> high = new ArrayList<MemFunc>();
-        MemFunc highMem = new TrapezoidalMemFunc("highUpper",31, 41, 50, 50, false, false);
+        MemFunc highMem = new TrapezoidalMemFunc("highUpper",31, 41, 50, 50, false, true);
         //MemFunc highLower = new TrapezoidalMemFunc("highLower",32, 42, 50, 50, true, false);
         high.add(highMem);
         //high.add(highLower);
@@ -133,7 +133,7 @@ public class RulesInputs {
         highC.add(highMemConsequent);
         highC.add(highLowerConsequent);*/
 
-        MemFunc highLowerConsequent = new TrapezoidalMemFunc("highLowerConsequent",32, 100, 100, 50, false, false);
+        MemFunc highLowerConsequent = new TrapezoidalMemFunc("highLowerConsequent",32, 100, 100, 50, false, true);
         highC.add(highLowerConsequent);
 
         this.setLow(low);
