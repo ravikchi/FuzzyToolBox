@@ -39,7 +39,7 @@ public class FuzzyUI extends Application {
     int canvasWidth = 800;
     int canvasHeight = 700;
     int canvasMargin = 100;
-    String type = "0";
+    String type = "2";
 
     List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
@@ -289,9 +289,12 @@ public class FuzzyUI extends Application {
         double top2 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
         double end = (memFunc.getStart()-fuzzySet.getSpread()*2+zeroValue)*scaley;
 
-        gc.strokeLine(startx+canvasMargin, starty+start+canvasMargin, startx+canvasMargin/2, starty+top1+canvasMargin);
-        gc.strokeLine(startx+canvasMargin/2, starty+top1+canvasMargin, startx+canvasMargin/2, starty+top2+canvasMargin);
-        gc.strokeLine(startx+canvasMargin/2, starty+top2+canvasMargin, startx+canvasMargin, starty+end+canvasMargin);
+        double y1 = 0 + canvasMargin;
+        double y2 = 0 + canvasMargin/2;
+
+        gc.strokeLine(startx+y1, starty+start+y1, startx+y2, starty+top1+y1);
+        gc.strokeLine(startx+y2, starty+top1+y1, startx+y2, starty+top2+y1);
+        gc.strokeLine(startx+y2, starty+top2+y1, startx+y1, starty+end+y1);
 
     }
 
@@ -305,9 +308,24 @@ public class FuzzyUI extends Application {
         double top2 = (mc.getTop2()+zeroValue)*scalex;
         double end = (mc.getEnd()+zeroValue)*scalex;
 
-        gc.strokeLine(startx+start+canvasMargin, starty+canvasMargin, startx+top1+canvasMargin, starty+canvasMargin/2);
-        gc.strokeLine(startx+top1+canvasMargin, starty+canvasMargin/2, startx+top2+canvasMargin, starty+canvasMargin/2);
-        gc.strokeLine(startx+top2+canvasMargin, starty+canvasMargin/2, startx+end+canvasMargin, starty+canvasMargin);
+        double y1 = 0 + canvasMargin;
+        double y2 = 0 + canvasMargin/2;
+
+        double sizey = canvasMargin - canvasMargin/2;
+
+        if(mc instanceof PWLMF){
+            PWLMF pmc = (PWLMF) mc;
+
+            y1 = y1-pmc.getY1() * sizey ;
+            y2 = y1-pmc.getY2()* sizey ;
+
+            System.out.println(pmc.getY1());
+            System.out.println(pmc.getY2());
+        }
+
+        gc.strokeLine(startx+start+y1, starty+y1, startx+top1+y1, starty+y2);
+        gc.strokeLine(startx+top1+y1, starty+y2, startx+top2+y1, starty+y2);
+        gc.strokeLine(startx+top2+y1, starty+y2, startx+end+y1, starty+y1);
     }
 
     private void drawYLines(GraphicsContext gc, int startx, int starty, MemFunc mc){
@@ -315,14 +333,29 @@ public class FuzzyUI extends Application {
 
         double scaley = sizey/(flc.getEndj()-flc.getIncrementj()-flc.getStartj());
 
+        double sizex = canvasMargin - canvasMargin/2;
+
         double start = (mc.getStart()+zeroValue)*scaley;
         double top1 = (mc.getTop1()+zeroValue)*scaley;
         double top2 = (mc.getTop2()+zeroValue)*scaley;
         double end = (mc.getEnd()+zeroValue)*scaley;
 
-        gc.strokeLine(startx+canvasMargin, starty+start+canvasMargin, startx+canvasMargin/2, starty+top1+canvasMargin);
-        gc.strokeLine(startx+canvasMargin/2, starty+top1+canvasMargin, startx+canvasMargin/2, starty+top2+canvasMargin);
-        gc.strokeLine(startx+canvasMargin/2, starty+top2+canvasMargin, startx+canvasMargin, starty+end+canvasMargin);
+        double y1 = canvasMargin;
+        double y2 = canvasMargin/2;
+
+        if(mc instanceof PWLMF){
+            PWLMF pmc = (PWLMF) mc;
+
+            y1 = y1-pmc.getY1() * sizex ;
+            y2 = y1-pmc.getY2()* sizex ;
+
+            System.out.println(pmc.getY1());
+            System.out.println(pmc.getY2());
+        }
+
+        gc.strokeLine(startx+y1, starty+start+y1, startx+y2, starty+top1+y1);
+        gc.strokeLine(startx+y2, starty+top1+y1, startx+y2, starty+top2+y1);
+        gc.strokeLine(startx+y2, starty+top2+y1, startx+y1, starty+end+y1);
     }
 
     private void setStokeColor(int i, GraphicsContext gc){
