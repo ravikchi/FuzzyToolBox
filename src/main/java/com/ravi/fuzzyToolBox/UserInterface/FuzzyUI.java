@@ -39,7 +39,7 @@ public class FuzzyUI extends Application {
     int canvasWidth = 800;
     int canvasHeight = 700;
     int canvasMargin = 100;
-    String type = "2";
+    String type = "3";
 
     List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
@@ -758,8 +758,6 @@ public class FuzzyUI extends Application {
 
         switches = flc.calculateRulePartitionsj();
 
-
-
         it = switches.iterator();
         while (it.hasNext()){
             double val = it.next();
@@ -778,7 +776,7 @@ public class FuzzyUI extends Application {
 
     private void getData(double spread1, double spread2, String type){
         NoveltyPartRules data = new NoveltyPartRules();
-        Rules rules = data.getRules();
+        Rules rules = data.getRules(type);
 
         inputs.clear();
         inputs.add(new FuzzySetImpl(spread1));
@@ -794,6 +792,8 @@ public class FuzzyUI extends Application {
             rulesInputs.type1MemFunctions();
             rules = FuzzyPartitions.getRules(rulesInputs);
             setZeroValue(0);
+        }else if(type.equalsIgnoreCase("3")){
+            setZeroValue(1);
         }
 
 

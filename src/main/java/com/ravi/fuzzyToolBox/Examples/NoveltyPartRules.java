@@ -45,6 +45,30 @@ public class NoveltyPartRules {
         return memFuncs;
     }
 
+    public List<MemFunc> getMemFuncsInput3(){
+        List<MemFunc> memFuncs = new ArrayList<MemFunc>();
+
+        memFuncs.add(new PWLMF("Negative", -1,-1,-1, 0, false, true, 0, 1));
+
+        memFuncs.add(new PWLMF("Zero", -1, 0, 0, 1,false, true, 0, 1));
+
+        memFuncs.add(new PWLMF("Positive", 0, 1, 1,1, false, true,0, 1));
+
+        return memFuncs;
+    }
+
+    public List<MemFunc> getMemFuncsInput4(){
+        List<MemFunc> memFuncs = new ArrayList<MemFunc>();
+
+        memFuncs.add(new PWLMF("Negative", -1,-1,-1, 0,false, true, 0, 1));
+
+        memFuncs.add(new PWLMF("Zero", -1, 0, 0, 1, false, true,0, 1));
+
+        memFuncs.add(new PWLMF("Positive", 0, 1, 1,1, false, true,0, 1));
+
+        return memFuncs;
+    }
+
     public double[][] getConsequents(){
         double[][] values =  new double[3][3];
 
@@ -64,11 +88,15 @@ public class NoveltyPartRules {
 
     }
 
-    public Rules getRules(){
+    public Rules getRules(String type){
         Rules rules = new Rules();
 
         List<MemFunc> input1MemFuncs = getMemFuncsInput1();
         List<MemFunc> input2MemFuncs = getMemFuncsInput2();
+        if(type.equalsIgnoreCase("3")){
+            input1MemFuncs = getMemFuncsInput3();
+            input2MemFuncs = getMemFuncsInput4();
+        }
 
         double[][] cons = getConsequents();
 
@@ -80,15 +108,19 @@ public class NoveltyPartRules {
         for (int i = 1; i <= 3; i++) {
             List<MemFunc> antcMemFuncs1 = new ArrayList<MemFunc>();
             antcMemFuncs1.add(input1MemFuncs.get(addi));
-            addi++;
-            antcMemFuncs1.add(input1MemFuncs.get(addi));
+            if(input1MemFuncs.get(addi).isType2()) {
+                addi++;
+                antcMemFuncs1.add(input1MemFuncs.get(addi));
+            }
             addj = 0;
             for (int j = 1; j <= 3; j++) {
 
                 List<MemFunc> antcMemFuncs2 = new ArrayList<MemFunc>();
                 antcMemFuncs2.add(input2MemFuncs.get(addj));
-                addj++;
-                antcMemFuncs2.add(input2MemFuncs.get(addj));
+                if(input2MemFuncs.get(addj).isType2()) {
+                    addj++;
+                    antcMemFuncs2.add(input2MemFuncs.get(addj));
+                }
 
 
                 Rule rule = new Rule(input1MemFuncs.get(addi).getName() + input2MemFuncs.get(addj).getName(), count);
@@ -111,7 +143,7 @@ public class NoveltyPartRules {
 
     public static void main(String[] args) {
         NoveltyPartRules createRules = new NoveltyPartRules();
-        Rules rules = createRules.getRules();
+        Rules rules = createRules.getRules("3");
 
         System.out.println(rules);
 

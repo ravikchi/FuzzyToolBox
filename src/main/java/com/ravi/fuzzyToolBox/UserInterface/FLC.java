@@ -380,7 +380,7 @@ public class FLC {
     public static void main(String[] args) {
 
         NoveltyPartRules data = new NoveltyPartRules();
-        Rules rules = data.getRules();
+        Rules rules = data.getRules("3");
 
         FZOperation fzOperation = new ProductTnorm();
 

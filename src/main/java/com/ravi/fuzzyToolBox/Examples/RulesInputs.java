@@ -91,7 +91,7 @@ public class RulesInputs {
 
     public void type1MemFunctions(){
         List<MemFunc> low = new ArrayList<MemFunc>();
-        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 10, 20, false, true);
+        MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 11, 20, false, true);
         //MemFunc lowLower = new TrapezoidalMemFunc("lowUpper",0, 0, 11, 21, true, true);
         low.add(lowMem);
         //low.add(lowLower);
