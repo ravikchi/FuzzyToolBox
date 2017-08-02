@@ -97,6 +97,13 @@ public class ProductTnorm implements FZOperation {
             }
 
             value = (upperFiringLevel + lowerFiringLevel)/2;
+            if(memFunc.isType2()){
+                if(memFunc.isUpper()){
+                    value = upperFiringLevel;
+                }else{
+                    value = lowerFiringLevel;
+                }
+            }
         }else if(input.getLSupport() != input.getRSupport()){
             for (double i = input.getLSupport(); i <= input.getRSupport() ; i=i+input.getIncrement()) {
                 double grade = memFunc.getMemGrade(i) * input.getMembershipFunction().getMemGrade(i);
