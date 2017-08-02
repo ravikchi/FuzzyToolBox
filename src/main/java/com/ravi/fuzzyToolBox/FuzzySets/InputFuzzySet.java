@@ -4,6 +4,8 @@ import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.MemFunctions.PWLMF;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 
+import java.util.List;
+
 /**
  * Created by 611445924 on 11/06/2017.
  */
@@ -12,6 +14,8 @@ public class InputFuzzySet implements FuzzySet {
     private double value;
     private MemFunc membershipFunction;
     private double increment;
+    private List<MemFunc> memFuncs;
+    private double fou;
 
     public InputFuzzySet(double spread, double value, MemFunc membershipFunction) {
         this.spread = spread;
@@ -25,6 +29,34 @@ public class InputFuzzySet implements FuzzySet {
         this.value = value;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
         this.increment = spread*2/100;
+    }
+
+    public InputFuzzySet(double spread, double value, List<MemFunc> memFuncs){
+        this.spread = spread;
+        this.value = value;
+        this.memFuncs = memFuncs;
+        this.increment = spread*2/100;
+    }
+
+    @Override
+    public List<MemFunc> getMemFuncs(double value) {
+        memFuncs.clear();
+        memFuncs.add(new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1));
+        this.memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        return memFuncs;
+    }
+
+    @Override
+    public void setMemFuncs(List<MemFunc> memFuncs) {
+        this.memFuncs = memFuncs;
+    }
+
+    @Override
+    public boolean isType2() {
+        if(memFuncs != null && memFuncs.size() > 1){
+            return true;
+        }
+        return false;
     }
 
     public double getSpread() {

@@ -57,7 +57,6 @@ public class AntecedentImpl implements Antecedent{
         return false;
     }
 
-    @Override
     public Map<String, Double> getFiringLevel(double x, FZOperation fuzzyOperation) {
         return getFiringLevel(new InputFuzzySet(0, x), fuzzyOperation);
     }

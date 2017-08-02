@@ -15,6 +15,36 @@ public class Tnorm implements FZOperation {
         double value = 0.0;
         if(input.getLSupport() == input.getRSupport()){
             value = memFunc.getMemGrade(x);
+        }else if(input.isType2()){
+            double upperFiringLevel = 0.0;
+            double lowerFiringLevel = 0.0;
+            MemFunc upper = null;
+            MemFunc lower = null;
+            for (MemFunc memFunc1:input.getMemFuncs(x)) {
+                if(memFunc1.isUpper()){
+                    upper = memFunc1;
+                }else{
+                    lower = memFunc1;
+                }
+            }
+
+            double increment = (upper.getEnd()-upper.getStart())*2/100;
+
+            for (double i = upper.getStart(); i <= upper.getEnd() ; i=i+increment) {
+                double grade = memFunc.getMemGrade(i) * upper.getMemGrade(i);
+                if(grade > upperFiringLevel){
+                    upperFiringLevel = grade;
+                }
+            }
+
+            for (double i = lower.getStart(); i <= lower.getEnd() ; i=i+increment) {
+                double grade = memFunc.getMemGrade(i) * lower.getMemGrade(i);
+                if(grade > lowerFiringLevel){
+                    lowerFiringLevel = grade;
+                }
+            }
+
+            value = (upperFiringLevel + lowerFiringLevel)/2;
         }else{
             double maxGrade = 0.0;
             for (double i = Math.min(memFunc.getLSupport(), input.getLSupport(x)); i < Math.max(memFunc.getRSupport(), input.getRSupport(x)) ; i++) {

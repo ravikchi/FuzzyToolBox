@@ -214,8 +214,8 @@ public class FLC {
             }
         }
 
-        incrementj = (endj-startj)/counti;
-        incrementi = (endi-starti)/countj;
+        incrementj = (endj-startj)/(counti-1);
+        incrementi = (endi-starti)/(countj-1);
 
         counts = new int[counti][countj];
         lowerNoveltyCounts = new int[counti][countj];
@@ -257,11 +257,14 @@ public class FLC {
 
     public void runRules(List<FuzzySet> inputs){
         int counti = 0;
-        for(double i=starti; i<=endi; i=i+incrementi) {
+        for(double i=starti; i<endi; i=i+incrementi) {
             int countj = 0;
-            for (double j=startj; j<=endj; j=j+incrementj) {
+            for (double j=startj; j<endj; j=j+incrementj) {
                 BigDecimal ib = new BigDecimal(i).setScale(2,BigDecimal.ROUND_HALF_UP);
                 BigDecimal jb = new BigDecimal(j).setScale(2,BigDecimal.ROUND_HALF_UP);
+                if(jb.doubleValue() > 11){
+                    System.out.println();
+                }
 
                 inputs.get(0).setValue(ib.doubleValue());
                 inputs.get(1).setValue(jb.doubleValue());
@@ -326,15 +329,15 @@ public class FLC {
                 if(t<k) {
                     yrN = yrN + triggeredRules.get(t).getCrAvg() * triggeredRules.get(t).getLowerFiringLevel();
                     yrD = yrD + triggeredRules.get(t).getLowerFiringLevel();
-                    System.out.print(" yi "+ triggeredRules.get(t).getCrAvg()+" lower "+ triggeredRules.get(t).getLowerFiringLevel()+" + ");
+                    //System.out.print(" yi "+ triggeredRules.get(t).getCrAvg()+" lower "+ triggeredRules.get(t).getLowerFiringLevel()+" + ");
                 }else{
                     yrN = yrN + triggeredRules.get(t).getCrAvg() * triggeredRules.get(t).getUpperFiringLevel();
                     yrD = yrD + triggeredRules.get(t).getUpperFiringLevel();
-                    System.out.print(" yi "+ triggeredRules.get(t).getCrAvg()+" upper "+ triggeredRules.get(t).getUpperFiringLevel()+" + ");
+                    //System.out.print(" yi "+ triggeredRules.get(t).getCrAvg()+" upper "+ triggeredRules.get(t).getUpperFiringLevel()+" + ");
                 }
             }
 
-            System.out.println();
+            //System.out.println();
 
             double yl = ylN/ylD;
             double yr = yrN/yrD;
@@ -384,7 +387,13 @@ public class FLC {
 
         FZOperation fzOperation = new ProductTnorm();
 
-        RulesInputs rulesInputs = new RulesInputs(new FuzzySetImpl(0), new FuzzySetImpl(0), 11);
+
+        List<FuzzySet> inputs = new ArrayList<FuzzySet>();
+
+        inputs.add(new FuzzySetImpl(1,1/10));
+        inputs.add(new FuzzySetImpl(1, 1/10));
+
+        RulesInputs rulesInputs = new RulesInputs(inputs.get(0), inputs.get(1), 11);
         List<MemFunc> low = new ArrayList<MemFunc>();
         MemFunc lowMem = new TrapezoidalMemFunc("lowLower",0, 0, 9, 19, true, false);
         MemFunc lowLower = new TrapezoidalMemFunc("lowUpper",0, 0, 11, 21, true, true);
@@ -431,35 +440,35 @@ public class FLC {
         rulesInputs.setHighConseqent(highC);
 
         FLC flc = new FLC(FuzzyPartitions.getRules(rulesInputs), fzOperation);
-        flc.initiate(49, 49);
-        flc.runRules();
+        flc.initiate(149, 149);
+        flc.runRules(inputs);
 
         System.out.println("########################################################################################################################################################################################");
 
         for (int i = 0; i < flc.getCounts().length-1; i++) {
             for (int j = 0; j < flc.getCounts()[i].length-1; j++) {
-                System.out.print(flc.getCounts()[i][j]+"  ");
+                System.out.print(flc.getCounts()[i][j]+" ");
             }
             System.out.println();
         }
 
-        System.out.println("########################################################################################################################################################################################");
-
-        for (int i = 0; i < flc.getLowerNoveltyCounts().length-1; i++) {
-            for (int j = 0; j < flc.getLowerNoveltyCounts()[i].length-1; j++) {
-                System.out.print(flc.getLowerNoveltyCounts()[i][j]+"  ");
-            }
-            System.out.println();
-        }
-
-        System.out.println("########################################################################################################################################################################################");
-
-        for (int i = 0; i < flc.getUpperNoveltyCounts().length-1; i++) {
-            for (int j = 0; j < flc.getUpperNoveltyCounts()[i].length-1; j++) {
-                System.out.print(flc.getUpperNoveltyCounts()[i][j]+"  ");
-            }
-            System.out.println();
-        }
+//        System.out.println("########################################################################################################################################################################################");
+//
+//        for (int i = 0; i < flc.getLowerNoveltyCounts().length-1; i++) {
+//            for (int j = 0; j < flc.getLowerNoveltyCounts()[i].length-1; j++) {
+//                System.out.print(flc.getLowerNoveltyCounts()[i][j]+" ");
+//            }
+//            System.out.println();
+//        }
+//
+//        System.out.println("########################################################################################################################################################################################");
+//
+//        for (int i = 0; i < flc.getUpperNoveltyCounts().length-1; i++) {
+//            for (int j = 0; j < flc.getUpperNoveltyCounts()[i].length-1; j++) {
+//                System.out.print(flc.getUpperNoveltyCounts()[i][j]+" ");
+//            }
+//            System.out.println();
+//        }
 
 
     }

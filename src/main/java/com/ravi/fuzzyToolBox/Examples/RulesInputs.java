@@ -12,8 +12,8 @@ import java.util.List;
  * Created by 611445924 on 29/05/2017.
  */
 public class RulesInputs {
-    private FuzzySet x = new FuzzySetImpl(9);
-    private FuzzySet y = new FuzzySetImpl(9);
+    private FuzzySet x;
+    private FuzzySet y;
     private boolean type2 = false;
 
 

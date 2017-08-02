@@ -4,18 +4,44 @@ import com.ravi.fuzzyToolBox.MemFunctions.MemFunc;
 import com.ravi.fuzzyToolBox.MemFunctions.PWLMF;
 import com.ravi.fuzzyToolBox.MemFunctions.TrapezoidalMemFunc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by rc16956 on 23/05/2017.
  */
 public class FuzzySetImpl implements FuzzySet {
     private double spread;
     private double value;
+    private double fou;
     private MemFunc membershipFunction;
+    private List<MemFunc> memFuncs;
     private double increment;
 
 
     public MemFunc getMembershipFunction(double value) {
         return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value), false, false);
+    }
+
+    @Override
+    public List<MemFunc> getMemFuncs(double value) {
+        memFuncs.clear();
+        memFuncs.add(new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1));
+        memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        return memFuncs;
+    }
+
+    @Override
+    public void setMemFuncs(List<MemFunc> memFuncs) {
+        this.memFuncs = memFuncs;
+    }
+
+    @Override
+    public boolean isType2() {
+        if(memFuncs != null && memFuncs.size() > 1){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -41,6 +67,20 @@ public class FuzzySetImpl implements FuzzySet {
         this.spread = spread;
         this.increment = spread*2/100;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
+    }
+
+    public FuzzySetImpl(double spread, double fou){
+        this.spread = spread + fou *2;
+        this.fou = fou;
+        this.increment = this.spread*2/100;
+        this.memFuncs = new ArrayList<MemFunc>();
+        this.membershipFunction = new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1);
+        this.memFuncs.add(this.membershipFunction);
+        this.memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+    }
+
+    public FuzzySetImpl(List<MemFunc> memFuncs){
+        this.memFuncs = memFuncs;
     }
 
     public double getLSupport(double value) {

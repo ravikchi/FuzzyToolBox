@@ -39,7 +39,8 @@ public class FuzzyUI extends Application {
     int canvasWidth = 800;
     int canvasHeight = 700;
     int canvasMargin = 100;
-    String type = "3";
+    String type = "0";
+    String inputTypeText = "2";
 
     List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
@@ -71,10 +72,10 @@ public class FuzzyUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        double spread1 = 0.0;
-        double spread2 = 0.0;
+        double spread1 = 0.1;
+        double spread2 = 0.1;
 
-        getData(spread1, spread2, type);
+        getData(spread1, spread2, type, inputTypeText);
 
         prepareCanvas(0, 0);
 
@@ -88,6 +89,7 @@ public class FuzzyUI extends Application {
                     TextField tf = (TextField) c.getParent().getParent().getParent().lookup("#spread1T");
                     TextField tf1 = (TextField) c.getParent().getParent().getParent().lookup("#spread2T");
                     TextField flcTypeVal = (TextField) c.getParent().getParent().getParent().lookup("#flcTypeVal");
+                    TextField inputTypeVal = (TextField) c.getParent().getParent().getParent().lookup("#inputTypeVal");
                     double tfint = 0;
                     double tf1int = 0;
 
@@ -96,7 +98,7 @@ public class FuzzyUI extends Application {
                         tf1int = Double.parseDouble(tf1.getText());
 
                         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                        getData(tfint, tf1int, flcTypeVal.getText());
+                        getData(tfint, tf1int, flcTypeVal.getText(), inputTypeVal.getText());
                         type = flcTypeVal.getText();
                         prepareCanvas(0, 0);
 
@@ -137,7 +139,7 @@ public class FuzzyUI extends Application {
         root.getChildren().add(pane);
 
         //root.getChildren().add(canvas);
-        root.getChildren().add(textBoxes(spread1, spread2, type));
+        root.getChildren().add(textBoxes(spread1, spread2, type, inputTypeText));
 /*
         root.getChildren().add(lowerNoveltyCanvas);
         root.getChildren().add(upperNoveltyCanvas);*/
@@ -149,7 +151,7 @@ public class FuzzyUI extends Application {
         primaryStage.show();
     }
 
-    private Group textBoxes(double spr1, double spr2, String type){
+    private Group textBoxes(double spr1, double spr2, String type, String inputTypeText){
         Group grp = new Group();
         grp.setTranslateX(canvasWidth+canvasMargin);
 
@@ -190,11 +192,22 @@ public class FuzzyUI extends Application {
         flcTypeVal.setText(type);
         row4.getChildren().addAll(flcType, flcTypeVal);
         row4.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
+
+        Group row5 = new Group();
+        Label inputType = new Label("Input Type");
+        TextField inputTypeVal = new TextField();
+        inputTypeVal.setTranslateX(moveRight);
+        inputTypeVal.setId("inputTypeVal");
+        inputTypeVal.setText(inputTypeText);
+        row5.getChildren().addAll(inputType, inputTypeVal);
+        row5.setTranslateY(moveDown);
 
         grp.getChildren().add(row1);
         grp.getChildren().add(row2);
         grp.getChildren().add(row3);
         grp.getChildren().add(row4);
+        grp.getChildren().add(row5);
 
         return grp;
     }
@@ -240,23 +253,29 @@ public class FuzzyUI extends Application {
     }
 
     private void drawSecondaryPartitions(MemFunc low, MemFunc mid, GraphicsContext gc){
+        double sizex = canvasWidth - canvasMargin;
+        double scalex = sizex/(flc.getEndi()-flc.getStarti());
+
+        double sizey = canvasHeight - canvasMargin;
+        double scaley = sizey/(flc.getEndj()-flc.getStartj());
+
         gc.setStroke(Color.BLACK);
         if(low.getTop2() != mid.getStart()) {
-            gc.strokeLine(low.getTop2() * getScaleX() + canvasMargin, canvasMargin, low.getTop2() * getScaleX() + canvasMargin, canvasHeight);
-            gc.strokeLine(canvasMargin,low.getTop2()*getScaleY()+canvasMargin, canvasWidth, low.getTop2()*getScaleY()+canvasMargin);
+            gc.strokeLine(low.getTop2() * scalex + canvasMargin, canvasMargin, low.getTop2() * scalex + canvasMargin, canvasHeight);
+            gc.strokeLine(canvasMargin,low.getTop2()*scaley+canvasMargin, canvasWidth, low.getTop2()*scaley+canvasMargin);
             if(!mid.isUpper()) {
-                gc.strokeLine(mid.getStart() * getScaleX() + canvasMargin, canvasMargin, mid.getStart() * getScaleX() + canvasMargin, canvasHeight);
-                gc.strokeLine(canvasMargin, mid.getStart() * getScaleY() + canvasMargin, canvasWidth, mid.getStart() * getScaleY() + canvasMargin);
+                gc.strokeLine(mid.getStart() * scalex + canvasMargin, canvasMargin, mid.getStart() * scalex + canvasMargin, canvasHeight);
+                gc.strokeLine(canvasMargin, mid.getStart() * scaley + canvasMargin, canvasWidth, mid.getStart() * scaley + canvasMargin);
             }
 
         }
 
         if(mid.getTop1() != low.getEnd()){
-            gc.strokeLine(mid.getTop1() * getScaleX() + canvasMargin, canvasMargin, mid.getTop1() * getScaleX() + canvasMargin, canvasHeight);
-            gc.strokeLine(canvasMargin, mid.getTop1()*getScaleY()+canvasMargin, canvasWidth, mid.getTop1()*getScaleY()+canvasMargin);
+            gc.strokeLine(mid.getTop1() * scalex + canvasMargin, canvasMargin, mid.getTop1() * scalex + canvasMargin, canvasHeight);
+            gc.strokeLine(canvasMargin, mid.getTop1()*scaley+canvasMargin, canvasWidth, mid.getTop1()*scaley+canvasMargin);
             if(!low.isUpper()) {
-                gc.strokeLine(low.getEnd() * getScaleX() + canvasMargin, canvasMargin, low.getEnd() * getScaleX() + canvasMargin, canvasHeight);
-                gc.strokeLine(canvasMargin, low.getEnd()*getScaleY()+canvasMargin, canvasWidth, low.getEnd()*getScaleY()+canvasMargin);
+                gc.strokeLine(low.getEnd() * scalex + canvasMargin, canvasMargin, low.getEnd() * scalex + canvasMargin, canvasHeight);
+                gc.strokeLine(canvasMargin, low.getEnd()*scaley+canvasMargin, canvasWidth, low.getEnd()*scaley+canvasMargin);
             }
         }
     }
@@ -474,14 +493,14 @@ public class FuzzyUI extends Application {
     private double getScaleX(){
         double sizex = canvasWidth - canvasMargin;
 
-        return sizex/flc.getCounts()[0].length;
+        return sizex/(flc.getCounts()[0].length-1);
         //return sizex/(flc.getEndi()-flc.getStarti());
     }
 
     private double getScaleY(){
         double sizey = canvasHeight - canvasMargin;
 
-        return sizey/flc.getCounts().length;
+        return sizey/(flc.getCounts().length-1);
         //return sizey/(flc.getEndi()-flc.getStarti());
     }
 
@@ -774,13 +793,19 @@ public class FuzzyUI extends Application {
         this.zeroValue = zeroValue;
     }
 
-    private void getData(double spread1, double spread2, String type){
+    private void getData(double spread1, double spread2, String type, String inputTypeText){
         NoveltyPartRules data = new NoveltyPartRules();
         Rules rules = data.getRules(type);
 
         inputs.clear();
-        inputs.add(new FuzzySetImpl(spread1));
-        inputs.add(new FuzzySetImpl(spread2));
+        if(inputTypeText.equalsIgnoreCase("2") && spread1>0 && spread2>0) {
+            inputs.add(new FuzzySetImpl(spread1,spread1/10));
+            inputs.add(new FuzzySetImpl(spread2, spread2/10));
+        }else {
+            inputs.add(new FuzzySetImpl(spread1));
+            inputs.add(new FuzzySetImpl(spread2));
+        }
+
 
         RulesInputs rulesInputs = new RulesInputs(inputs.get(0), inputs.get(1), 11);
 
@@ -800,7 +825,7 @@ public class FuzzyUI extends Application {
         FZOperation fzOperation = new ProductTnorm();
 
         this.flc = new FLC(rules, fzOperation);
-        flc.initiate(49, 49);
+        flc.initiate(149, 149);
         flc.runRules(inputs);
         if(type.equalsIgnoreCase("2")) {
             setZeroValue(1);
