@@ -39,8 +39,8 @@ public class FuzzyUI extends Application {
     int canvasWidth = 800;
     int canvasHeight = 700;
     int canvasMargin = 100;
-    String type = "0";
-    String inputTypeText = "2";
+    String type = "1";
+    String inputTypeText = "1";
 
     List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
@@ -72,10 +72,10 @@ public class FuzzyUI extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
 
-        double spread1 = 0.1;
-        double spread2 = 0.1;
+        double spread1 = 1;
+        double spread2 = 1;
 
-        getData(spread1, spread2, type, inputTypeText);
+        getData(spread1, spread2, type, inputTypeText, true);
 
         prepareCanvas(0, 0);
 
@@ -90,6 +90,7 @@ public class FuzzyUI extends Application {
                     TextField tf1 = (TextField) c.getParent().getParent().getParent().lookup("#spread2T");
                     TextField flcTypeVal = (TextField) c.getParent().getParent().getParent().lookup("#flcTypeVal");
                     TextField inputTypeVal = (TextField) c.getParent().getParent().getParent().lookup("#inputTypeVal");
+                    RadioButton button = (RadioButton) c.getParent().getParent().getParent().lookup("#TrapezoidalFN");
                     double tfint = 0;
                     double tf1int = 0;
 
@@ -98,7 +99,7 @@ public class FuzzyUI extends Application {
                         tf1int = Double.parseDouble(tf1.getText());
 
                         canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-                        getData(tfint, tf1int, flcTypeVal.getText(), inputTypeVal.getText());
+                        getData(tfint, tf1int, flcTypeVal.getText(), inputTypeVal.getText(), button.isSelected());
                         type = flcTypeVal.getText();
                         prepareCanvas(0, 0);
 
@@ -202,12 +203,21 @@ public class FuzzyUI extends Application {
         inputTypeVal.setText(inputTypeText);
         row5.getChildren().addAll(inputType, inputTypeVal);
         row5.setTranslateY(moveDown);
+        moveDown = moveDown + 30;
+
+        Group row6 = new Group();
+        RadioButton button1 = new RadioButton("Trapezoidal FN");
+        button1.setSelected(true);
+        button1.setId("TrapezoidalFN");
+        row6.getChildren().addAll(button1);
+        row6.setTranslateY(moveDown);
 
         grp.getChildren().add(row1);
         grp.getChildren().add(row2);
         grp.getChildren().add(row3);
         grp.getChildren().add(row4);
         grp.getChildren().add(row5);
+        grp.getChildren().add(row6);
 
         return grp;
     }
@@ -280,16 +290,17 @@ public class FuzzyUI extends Application {
         }
     }
 
-    private void drawXInputLines(GraphicsContext gc, int startx, int starty,FuzzySet fuzzySet, MemFunc memFunc){
+    private void drawXInputLines(GraphicsContext gc, int startx, int starty,MemFunc inputMem, MemFunc memFunc){
         double sizex = canvasWidth - canvasMargin;
 
         double scalex = sizex/(flc.getEndi()-flc.getIncrementi()-flc.getStarti());
 
 
-        double start = (memFunc.getStart()+zeroValue)*scalex;
-        double top1 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scalex;
-        double top2 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scalex;
-        double end = (memFunc.getStart()-fuzzySet.getSpread()*2+zeroValue)*scalex;
+
+        double start = (inputMem.getStart()+zeroValue)*scalex;
+        double top1 = (inputMem.getTop1()+zeroValue)*scalex;
+        double top2 = (inputMem.getTop2()+zeroValue)*scalex;
+        double end = (inputMem.getEnd()+zeroValue)*scalex;
 
         gc.strokeLine(startx+start+canvasMargin, starty+canvasMargin, startx+top1+canvasMargin, starty+canvasMargin/2);
         gc.strokeLine(startx+top1+canvasMargin, starty+canvasMargin/2, startx+top2+canvasMargin, starty+canvasMargin/2);
@@ -297,16 +308,16 @@ public class FuzzyUI extends Application {
 
     }
 
-    private void drawYInputLines(GraphicsContext gc, int startx, int starty,FuzzySet fuzzySet, MemFunc memFunc){
+    private void drawYInputLines(GraphicsContext gc, int startx, int starty,MemFunc inputMem, MemFunc memFunc){
         double sizey = canvasHeight - canvasMargin;
 
         double scaley = sizey/(flc.getEndj()-flc.getIncrementj()-flc.getStartj());
 
 
-        double start = (memFunc.getStart()+zeroValue)*scaley;
-        double top1 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
-        double top2 = (memFunc.getStart()-fuzzySet.getSpread()+zeroValue)*scaley;
-        double end = (memFunc.getStart()-fuzzySet.getSpread()*2+zeroValue)*scaley;
+        double start = (inputMem.getStart()+zeroValue)*scaley;
+        double top1 = (inputMem.getTop1()+zeroValue)*scaley;
+        double top2 = (inputMem.getTop2()+zeroValue)*scaley;
+        double end = (inputMem.getEnd()+zeroValue)*scaley;
 
         double y1 = 0 + canvasMargin;
         double y2 = 0 + canvasMargin/2;
@@ -416,8 +427,16 @@ public class FuzzyUI extends Application {
             }
         }
 
-        drawXInputLines(gc, startx, starty, inputs.get(1), flc.getInputIUpperMemFunc().get(2));
-        drawYInputLines(gc, startx, starty, inputs.get(0), flc.getInputJUpperMemFunc().get(2));
+//        if(inputs.get(1).isType2()){
+//
+//        }else {
+//            MemFunc inputMem = inputs.get(1).getMembershipFunction(flc.getInputIUpperMemFunc().get(2).getStart());
+//            drawXInputLines(gc, startx, starty, inputMem, flc.getInputIUpperMemFunc().get(2));
+//            inputMem = inputs.get(0).getMembershipFunction(flc.getInputIUpperMemFunc().get(2).getStart());
+//            drawYInputLines(gc, startx, starty, inputMem, flc.getInputJUpperMemFunc().get(2));
+//        }
+
+        drawInputLines(gc, startx, starty, inputs.get(1), inputs.get(0), flc.getInputIUpperMemFunc().get(2), flc.getInputJUpperMemFunc().get(2));
 
 
         gc.setStroke(Color.BLACK);
@@ -453,11 +472,45 @@ public class FuzzyUI extends Application {
             }
         }
 
-        gc.setStroke(Color.BLACK);
-        drawXInputLines(gc, startx, starty, inputs.get(1), flc.getInputIUpperMemFunc().get(2));
-        drawYInputLines(gc, startx, starty, inputs.get(0), flc.getInputJUpperMemFunc().get(2));
+//        gc.setStroke(Color.BLACK);
+//        if(inputs.get(1).isType2()){
+//            List<MemFunc> memFuncs = inputs.get(1).getMemFuncs(flc.getInputIUpperMemFunc().get(2).getStart());
+//            for (int i = 0; i < memFuncs.size(); i++) {
+//                MemFunc inputMem = memFuncs.get(i);
+//                drawXInputLines(gc, startx, starty, inputMem, flc.getInputIUpperMemFunc().get(2));
+//            }
+//        }else {
+//            MemFunc inputMem = inputs.get(1).getMembershipFunction(flc.getInputIUpperMemFunc().get(2).getStart());
+//            drawXInputLines(gc, startx, starty, inputMem, flc.getInputIUpperMemFunc().get(2));
+//            inputMem = inputs.get(0).getMembershipFunction(flc.getInputIUpperMemFunc().get(2).getStart());
+//            drawYInputLines(gc, startx, starty, inputMem, flc.getInputJUpperMemFunc().get(2));
+//        }
+
+        drawInputLines(gc, startx, starty, inputs.get(1), inputs.get(0), flc.getInputIUpperMemFunc().get(2), flc.getInputJUpperMemFunc().get(2));
 
         gc.setStroke(Color.BLACK);
+    }
+
+    private void drawInputLines(GraphicsContext gc, int startx, int starty, FuzzySet fuzzySetx, FuzzySet fuzzySety, MemFunc memFuncx, MemFunc memFuncy){
+        if(fuzzySetx.isType2()){
+            List<MemFunc> memFuncs = fuzzySetx.getMemFuncs(memFuncx.getStart());
+            for (int i = 0; i < memFuncs.size(); i++) {
+                MemFunc inputMem = memFuncs.get(i);
+                drawXInputLines(gc, startx, starty, inputMem, memFuncx);
+            }
+
+            memFuncs = fuzzySety.getMemFuncs(memFuncy.getStart());
+            for (int i = 0; i < memFuncs.size(); i++) {
+                MemFunc inputMem = memFuncs.get(i);
+                drawYInputLines(gc, startx, starty, inputMem, memFuncy);
+            }
+
+        }else {
+            MemFunc inputMem = fuzzySetx.getMembershipFunction(memFuncx.getStart());
+            drawXInputLines(gc, startx, starty, inputMem, memFuncx);
+            inputMem = fuzzySety.getMembershipFunction(memFuncy.getStart());
+            drawYInputLines(gc, startx, starty, inputMem, memFuncy);
+        }
     }
 
     private void drawMeasurementLines(int startx, int starty,GraphicsContext gc){
@@ -793,7 +846,7 @@ public class FuzzyUI extends Application {
         this.zeroValue = zeroValue;
     }
 
-    private void getData(double spread1, double spread2, String type, String inputTypeText){
+    private void getData(double spread1, double spread2, String type, String inputTypeText, boolean trapezoidal){
         NoveltyPartRules data = new NoveltyPartRules();
         Rules rules = data.getRules(type);
 
@@ -802,8 +855,8 @@ public class FuzzyUI extends Application {
             inputs.add(new FuzzySetImpl(spread1,spread1/10));
             inputs.add(new FuzzySetImpl(spread2, spread2/10));
         }else {
-            inputs.add(new FuzzySetImpl(spread1));
-            inputs.add(new FuzzySetImpl(spread2));
+            inputs.add(new FuzzySetImpl(spread1, trapezoidal));
+            inputs.add(new FuzzySetImpl(spread2, trapezoidal));
         }
 
 

@@ -17,10 +17,14 @@ public class FuzzySetImpl implements FuzzySet {
     private MemFunc membershipFunction;
     private List<MemFunc> memFuncs;
     private double increment;
+    private boolean pwl = false;
 
 
     public MemFunc getMembershipFunction(double value) {
-        return new TrapezoidalMemFunc("",getLSupport(value), value, value, getRSupport(value), false, false);
+        if(!pwl)
+            return new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
+        else
+            return new PWLMF("",getLSupport(value), value-(spread/2), value+(spread/2), getRSupport(value), false, false, 0, 1);
     }
 
     @Override
@@ -67,6 +71,16 @@ public class FuzzySetImpl implements FuzzySet {
         this.spread = spread;
         this.increment = spread*2/100;
         this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
+    }
+
+    public FuzzySetImpl(double spread, boolean pwl) {
+        this.spread = spread;
+        this.increment = spread*2/100;
+        this.pwl = pwl;
+        if(!pwl)
+            this.membershipFunction = new PWLMF("",getLSupport(value), value, value, getRSupport(value), false, false, 0, 1);
+        else
+            this.membershipFunction = new PWLMF("",getLSupport(value), value-(spread/2), value+(spread/2), getRSupport(value), false, false, 0, 1);
     }
 
     public FuzzySetImpl(double spread, double fou){
