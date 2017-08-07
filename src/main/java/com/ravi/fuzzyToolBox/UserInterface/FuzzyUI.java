@@ -852,8 +852,8 @@ public class FuzzyUI extends Application {
 
         inputs.clear();
         if(inputTypeText.equalsIgnoreCase("2") && spread1>0 && spread2>0) {
-            inputs.add(new FuzzySetImpl(spread1-(2*spread1/10),spread1/10));
-            inputs.add(new FuzzySetImpl(spread2-(2*spread2/10), spread2/10));
+            inputs.add(new FuzzySetImpl(spread1-(2*spread1/10),spread1/10, trapezoidal));
+            inputs.add(new FuzzySetImpl(spread2-(2*spread2/10), spread2/10, trapezoidal));
         }else {
             inputs.add(new FuzzySetImpl(spread1, trapezoidal));
             inputs.add(new FuzzySetImpl(spread2, trapezoidal));

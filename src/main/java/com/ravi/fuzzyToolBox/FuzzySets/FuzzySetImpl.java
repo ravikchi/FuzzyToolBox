@@ -30,8 +30,14 @@ public class FuzzySetImpl implements FuzzySet {
     @Override
     public List<MemFunc> getMemFuncs(double value) {
         memFuncs.clear();
-        memFuncs.add(new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1));
-        memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        if(!pwl) {
+            memFuncs.add(new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1));
+            memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        }else{
+            this.memFuncs.add(new PWLMF("", getLSupport(value) - fou, value-(spread/2), value+(spread/2), getRSupport(value) + fou, true, true, 0, 1));
+            this.memFuncs.add(new PWLMF("", getLSupport(value), value-(spread/2), value+(spread/2), getRSupport(value), true, false, 0, 1));
+        }
+
         return memFuncs;
     }
 
@@ -83,14 +89,21 @@ public class FuzzySetImpl implements FuzzySet {
             this.membershipFunction = new PWLMF("",getLSupport(value), value-(spread/2), value+(spread/2), getRSupport(value), false, false, 0, 1);
     }
 
-    public FuzzySetImpl(double spread, double fou){
+    public FuzzySetImpl(double spread, double fou, boolean pwl){
         this.spread = spread + fou *2;
         this.fou = fou;
+        this.pwl = pwl;
         this.increment = this.spread*2/100;
         this.memFuncs = new ArrayList<MemFunc>();
-        this.membershipFunction = new PWLMF("",getLSupport(value)-fou, value, value, getRSupport(value)+fou, true, true, 0, 1);
-        this.memFuncs.add(this.membershipFunction);
-        this.memFuncs.add(new PWLMF("",getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        if(!pwl) {
+            this.membershipFunction = new PWLMF("", getLSupport(value) - fou, value, value, getRSupport(value) + fou, true, true, 0, 1);
+            this.memFuncs.add(this.membershipFunction);
+            this.memFuncs.add(new PWLMF("", getLSupport(value), value, value, getRSupport(value), true, false, 0, 1));
+        }else{
+            this.membershipFunction = new PWLMF("", getLSupport(value) - fou, value-(spread/2), value+(spread/2), getRSupport(value) + fou, true, true, 0, 1);
+            this.memFuncs.add(this.membershipFunction);
+            this.memFuncs.add(new PWLMF("", getLSupport(value), value-(spread/2), value+(spread/2), getRSupport(value), true, false, 0, 1));
+        }
     }
 
     public FuzzySetImpl(List<MemFunc> memFuncs){

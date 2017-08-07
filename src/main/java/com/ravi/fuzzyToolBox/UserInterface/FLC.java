@@ -390,8 +390,8 @@ public class FLC {
 
         List<FuzzySet> inputs = new ArrayList<FuzzySet>();
 
-        inputs.add(new FuzzySetImpl(1,1/10));
-        inputs.add(new FuzzySetImpl(1, 1/10));
+        inputs.add(new FuzzySetImpl(1,1/10, false));
+        inputs.add(new FuzzySetImpl(1, 1/10, false));
 
         RulesInputs rulesInputs = new RulesInputs(inputs.get(0), inputs.get(1), 11);
         List<MemFunc> low = new ArrayList<MemFunc>();
